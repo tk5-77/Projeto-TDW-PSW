@@ -1,25 +1,19 @@
-import React from 'react';
+"use client";
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "#333", padding: "10px", color: "white", marginTop: "20px" }}>
-      <p>&copy; 2025 - Todos os direitos reservados</p>
-      <style jsx>{`
-        .footer {
-          background-color: #333;
-          color: white;
-          text-align: center;
-          padding: 10px;
-          position: fixed;
-          bottom: 0;
-          width: 100%;
-        }
-        .footer p {
-          margin: 0;
-        }
-      `}</style>
+    <footer
+      style={{
+        backgroundColor: "#333",
+        color: "#fff",
+        textAlign: "center",
+        padding: "2rem", // Aumentado o padding para um visual melhor
+        width: "100%", // Faz o footer ocupar toda a largura
+      }}
+    >
+      <p style={{ margin: 0, fontSize: "1.2rem" }}>
+        © 2025 Plataforma de Serviços. Todos os direitos reservados.
+      </p>
     </footer>
   );
-};
-
-export default Footer;
+}

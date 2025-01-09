@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import Header from "./componentsPaginaInicial/Header"; // Importando Header
 import Footer from "./componentsPaginaInicial/Footer"; // Importando Footer
@@ -15,23 +15,23 @@ export default function Home() {
           alignItems: "center",
           justifyContent: "center",
           height: "80vh", // Ajustado para dar espaço para o footer
-          gap: "1rem",
+          gap: "2rem",
           background: "#f0f0f0",
         }}
       >
-        <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Bem-vindo!</h1>
-        <p style={{ fontSize: "1.2rem" }}>Escolha para onde deseja ir:</p>
+        <h1 style={{ fontSize: "3rem", marginBottom: "2rem" }}>Bem-vindo!</h1>
+        <p style={{ fontSize: "1.5rem" }}>Escolha para onde deseja ir:</p>
 
-        <div style={{ display: "flex", gap: "1rem" }}>
+        <div style={{ display: "flex", gap: "2rem" }}>
           <Link href="/ginasio">
             <button
               style={{
-                padding: "0.5rem 1rem",
-                fontSize: "1rem",
+                padding: "1rem 2rem",
+                fontSize: "1.5rem",
                 background: "#0070f3",
                 color: "#fff",
                 border: "none",
-                borderRadius: "5px",
+                borderRadius: "10px",
                 cursor: "pointer",
                 transition: "background 0.3s ease",
               }}
@@ -49,12 +49,12 @@ export default function Home() {
           <Link href="/barbearia">
             <button
               style={{
-                padding: "0.5rem 1rem",
-                fontSize: "1rem",
+                padding: "1rem 2rem",
+                fontSize: "1.5rem",
                 background: "#0070f3",
                 color: "#fff",
                 border: "none",
-                borderRadius: "5px",
+                borderRadius: "10px",
                 cursor: "pointer",
                 transition: "background 0.3s ease",
               }}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 export default function Footer() {
   return (
@@ -7,13 +7,15 @@ export default function Footer() {
         backgroundColor: "#333",
         color: "#fff",
         textAlign: "center",
-        padding: "1rem",
+        padding: "2rem", // Aumentado o padding para maior espaçamento
         position: "fixed",
         width: "100%",
         bottom: 0,
       }}
     >
-      <p style={{ margin: 0 }}>© 2025 Plataforma de Serviços. Todos os direitos reservados.</p>
+      <p style={{ margin: 0, fontSize: "1.5rem" }}> {/* Aumentado o tamanho da fonte */}
+        © 2025 Cinfães Fit & Barber. Todos os direitos reservados.
+      </p>
     </footer>
   );
 }

@@ -1,7 +1,8 @@
-"use client"
+"use client";
 import React from "react";
-import Header from "../components/Header"
-import Footer from "../components/Footer"
+import { useRouter } from "next/navigation"; // Importação do useRouter
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const services = [
   { id: 1, name: "Treino Individual", price: "25€" },
@@ -10,6 +11,7 @@ const services = [
 ];
 
 export default function GymPage() {
+  const router = useRouter(); // Inicializa o roteador
   const [formData, setFormData] = React.useState({ name: "", service: "", date: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -25,11 +27,10 @@ export default function GymPage() {
 
   return (
     <div className="container">
-      <Header /> {/* Usando o Header */}
+      <Header />
 
       <h1>Bem-vindo ao Ginásio</h1>
-      
-      {/* Serviços Disponíveis */}
+
       <section className="services-section">
         <h2>Serviços Disponíveis</h2>
         <ul>
@@ -41,7 +42,6 @@ export default function GymPage() {
         </ul>
       </section>
 
-      {/* Agendamento */}
       <section className="form-section">
         <h2>Agende o seu horário</h2>
         <form onSubmit={handleSubmit}>
@@ -89,11 +89,28 @@ export default function GymPage() {
         </form>
       </section>
 
-      <Footer /> {/* Usando o Footer */}
+      {/* Botão de Voltar à Página Inicial */}
+      <button
+        type="button"
+        onClick={() => router.push("/")}
+        style={{
+          marginTop: "20px",
+          padding: "10px 20px",
+          backgroundColor: "#2d9cdb",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+          fontSize: "16px",
+        }}
+      >
+        Voltar à Página Inicial
+      </button>
 
+      <Footer />
       <style jsx>{`
         .container {
-          font-family: 'Arial', sans-serif;
+          font-family: "Arial", sans-serif;
           padding: 20px;
           background-color: #f4f4f9;
           max-width: 800px;
@@ -101,22 +118,16 @@ export default function GymPage() {
         }
 
         h1 {
+          font-size: 32px;
           color: #333;
           text-align: center;
           margin-bottom: 20px;
         }
 
         h2 {
+          font-size: 28px;
           color: #444;
-          margin-bottom: 10px;
-        }
-
-        .services-section, .form-section {
-          background-color: #fff;
-          padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          margin-bottom: 20px;
+          margin-bottom: 15px;
         }
 
         ul {
@@ -125,8 +136,8 @@ export default function GymPage() {
         }
 
         li {
-          margin-bottom: 10px;
-          font-size: 16px;
+          margin-bottom: 15px;
+          font-size: 20px;
         }
 
         span {
@@ -136,32 +147,30 @@ export default function GymPage() {
 
         label {
           display: block;
-          margin-bottom: 10px;
+          margin-bottom: 15px;
+          font-size: 20px;
           font-weight: bold;
         }
 
-        input, select {
+        input,
+        select {
           width: 100%;
-          padding: 10px;
-          margin-top: 5px;
-          border-radius: 5px;
-          border: 1px solid #ccc;
+          padding: 15px;
+          margin-top: 10px;
+          border-radius: 8px;
+          border: 2px solid #ccc;
           box-sizing: border-box;
+          font-size: 18px;
         }
 
         input::placeholder {
           color: #aaa;
+          font-size: 16px;
         }
 
         button {
-          background-color: #2d9cdb;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 16px;
-          margin-top: 10px;
+          font-size: 20px;
+          padding: 15px 30px;
         }
 
         button:hover {

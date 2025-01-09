@@ -3,8 +3,17 @@ import Link from 'next/link';
 
 const Header = () => {
   return (
-    <header style={{ backgroundColor: "#2d9cdb", padding: "10px", color: "white" }}>
-      <h1>Bem-vindo ao nosso Serviço</h1>
+    <header style={{ 
+      backgroundColor: "#2d9cdb", 
+      padding: "20px", 
+      color: "white", 
+      width: "100%", 
+      position: "absolute", 
+      top: 0, 
+      left: 0, 
+      right: 0 
+    }}>
+      <h1 style={{ margin: 0 }}>Bem-vindo ao nosso Serviço</h1>
   
       <style jsx>{`
         .header {
@@ -14,6 +23,7 @@ const Header = () => {
           padding: 20px;
           background-color: #2d9cdb;
           color: white;
+          width: 100%;
         }
         .logo h1 {
           margin: 0;
