@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const serviceSchema = new mongoose.Schema({
   type: { type: String, required: true },
   entity: { type: mongoose.Schema.Types.ObjectId, ref: 'Entity', required: true },
