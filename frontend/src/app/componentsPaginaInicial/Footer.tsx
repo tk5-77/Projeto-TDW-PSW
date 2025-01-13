@@ -1,6 +1,16 @@
 "use client";
 
+import { useEffect } from "react";
+import Link from "next/link";
+
 export default function Footer() {
+  useEffect(() => {
+    document.body.style.overflowX = "hidden"; // Impede o scroll horizontal
+    return () => {
+      document.body.style.overflowX = "auto"; // Restaura o scroll ao desmontar o componente
+    };
+  }, []);
+
   return (
     <footer
       style={{
@@ -13,9 +23,20 @@ export default function Footer() {
         bottom: 0,
       }}
     >
-      <p style={{ margin: 0, fontSize: "1.5rem" }}> {/* Aumentado o tamanho da fonte */}
+      <p style={{ margin: 0, fontSize: "1.5rem" }}>
         © 2025 Cinfães Fit & Barber. Todos os direitos reservados.
       </p>
+      {/* Link para a página de login */}
+      <Link
+        href="/login"
+        style={{
+          color: "#fff",
+          textDecoration: "none",
+          fontSize: "1.2rem",
+        }}
+      >
+        Login
+      </Link>
     </footer>
   );
 }

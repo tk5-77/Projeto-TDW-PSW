@@ -17,6 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         flexDirection: "column",
         minHeight: "100vh", // Garante que o footer fique no final mesmo com pouco conteúdo
         background: "#f0f0f0", // Fundo para toda a página
+        overflowX: "hidden", // Desabilita o scroll lateral
       }}
     >
       <Header /> {/* Insere o Header no topo */}

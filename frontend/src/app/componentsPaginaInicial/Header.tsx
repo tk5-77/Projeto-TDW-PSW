@@ -1,7 +1,15 @@
 "use client";
+import { useEffect } from "react";
 import Link from "next/link";
 
 export default function Header() {
+  useEffect(() => {
+    document.body.style.overflowX = "hidden"; // Impede o scroll horizontal
+    return () => {
+      document.body.style.overflowX = "auto"; // Restaura o scroll ao desmontar o componente
+    };
+  }, []);
+
   return (
     <header
       style={{
@@ -14,15 +22,14 @@ export default function Header() {
         alignItems: "center",
       }}
     >
-      <h1 style={{ margin: 0, fontSize: "2.5rem" }}> {/* Aumentado o tamanho do título */}
-      Cinfães Fit & Barber
+      <h1 style={{ margin: 0, fontSize: "2.5rem" }}>
+        Cinfães Fit & Barber
       </h1>
-      <nav style={{ fontSize: "1.5rem" }}> {/* Aumentado o tamanho das opções do menu */}
+      <nav style={{ fontSize: "1.5rem", display: "flex", gap: "2rem" }}>
         <Link
           href="/"
           style={{
             color: "#fff",
-            margin: "0 2rem", // Aumentado o espaçamento entre os links
             textDecoration: "none",
           }}
         >
@@ -32,7 +39,6 @@ export default function Header() {
           href="/ginasio"
           style={{
             color: "#fff",
-            margin: "0 2rem",
             textDecoration: "none",
           }}
         >
@@ -42,11 +48,19 @@ export default function Header() {
           href="/barbearia"
           style={{
             color: "#fff",
-            margin: "0 2rem",
             textDecoration: "none",
           }}
         >
           Barbearia
+        </Link>
+        <Link
+          href="/login"
+          style={{
+            color: "#fff",
+            textDecoration: "none",
+          }}
+        >
+          Login
         </Link>
       </nav>
     </header>
