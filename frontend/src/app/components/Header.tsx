@@ -1,56 +1,70 @@
-import React from 'react';
-import Link from 'next/link';
+"use client";
+import { useEffect } from "react";
+import Link from "next/link";
 
-const Header = () => {
+export default function Header() {
+  useEffect(() => {
+    document.body.style.overflowX = "hidden"; // Impede o scroll horizontal
+    return () => {
+      document.body.style.overflowX = "auto"; // Restaura o scroll ao desmontar o componente
+    };
+  }, []);
+
   return (
-    <header style={{ 
-      backgroundColor: "#2d9cdb", 
-      padding: "20px", 
-      color: "white", 
-      width: "100%", 
-      position: "absolute", 
-      top: 0, 
-      left: 0, 
-      right: 0 
-    }}>
-      <h1 style={{ margin: 0 }}>Bem-vindo ao nosso Serviço</h1>
-  
-      <style jsx>{`
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 20px;
-          background-color: #2d9cdb;
-          color: white;
-          width: 100%;
-        }
-        .logo h1 {
-          margin: 0;
-        }
-        nav ul {
-          display: flex;
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
-        nav ul li {
-          margin-right: 20px;
-        }
-        nav ul li:last-child {
-          margin-right: 0;
-        }
-        nav a {
-          color: white;
-          text-decoration: none;
-          font-weight: bold;
-        }
-        nav a:hover {
-          text-decoration: underline;
-        }
-      `}</style>
+    <header
+      style={{
+        backgroundColor: "#0070f3",
+        color: "#fff",
+        padding: "2rem", // Aumentado o padding para mais espaçamento
+        width: "100%",
+        maxWidth: "100vw", // Garante que não ultrapasse a largura da tela
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        boxSizing: "border-box", // Inclui padding na largura total
+      }}
+    >
+      <h1 style={{ margin: 0, fontSize: "2.5rem" }}>
+        Cinfães Fit & Barber
+      </h1>
+      <nav style={{ fontSize: "1.5rem", display: "flex", gap: "2rem" }}>
+        <Link
+          href="/"
+          style={{
+            color: "#fff",
+            textDecoration: "none",
+          }}
+        >
+          Início
+        </Link>
+        <Link
+          href="/ginasio"
+          style={{
+            color: "#fff",
+            textDecoration: "none",
+          }}
+        >
+          Ginásio
+        </Link>
+        <Link
+          href="/barbearia"
+          style={{
+            color: "#fff",
+            textDecoration: "none",
+          }}
+        >
+          Barbearia
+        </Link>
+        <Link
+          href="/login"
+          style={{
+            color: "#fff",
+            textDecoration: "none",
+          }}
+        >
+          Login
+        </Link>
+      </nav>
     </header>
   );
-};
-
-export default Header;
+}
