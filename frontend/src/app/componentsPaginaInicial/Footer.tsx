@@ -17,13 +17,13 @@ export default function Footer() {
         backgroundColor: "#333",
         color: "#fff",
         textAlign: "center",
-        padding: "2rem", // Aumentado o padding para maior espaçamento
-        position: "fixed",
-        width: "100%",
-        bottom: 0,
+        padding: "2rem", // Aumentado o padding para um visual melhor
+        width: "100%", // Faz o footer ocupar toda a largura
+        maxWidth: "100vw", // Garante que não ultrapasse a largura da tela
+        boxSizing: "border-box", // Inclui o padding na largura total
       }}
     >
-      <p style={{ margin: 0, fontSize: "1.5rem" }}>
+      <p style={{ margin: 0, fontSize: "1.2rem" }}>
         © 2025 Cinfães Fit & Barber. Todos os direitos reservados.
       </p>
       {/* Link para a página de login */}

@@ -17,9 +17,11 @@ export default function Header() {
         color: "#fff",
         padding: "2rem", // Aumentado o padding para mais espaçamento
         width: "100%",
+        maxWidth: "100vw", // Garante que não ultrapasse a largura da tela
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        boxSizing: "border-box", // Inclui padding na largura total
       }}
     >
       <h1 style={{ margin: 0, fontSize: "2.5rem" }}>

@@ -1,29 +1,37 @@
-import React from 'react';
-import Link from 'next/link';
+"use client";
+import { useEffect } from "react";
+import Link from "next/link";
 
-const Header = () => {
+export default function Header() {
+  useEffect(() => {
+    document.body.style.overflowX = "hidden"; // Impede o scroll horizontal
+    return () => {
+      document.body.style.overflowX = "auto"; // Restaura o scroll ao desmontar o componente
+    };
+  }, []);
+
   return (
-    <header 
+    <header
       style={{
-        backgroundColor: "#0070f3", 
-        padding: "20px", 
-        color: "white", 
-        width: "100%", 
-        position: "absolute", 
-        top: 0, 
-        left: 0, 
-        right: 0 
+        backgroundColor: "#0070f3",
+        color: "#fff",
+        padding: "2rem", // Aumentado o padding para mais espaçamento
+        width: "100%",
+        maxWidth: "100vw", // Garante que não ultrapasse a largura da tela
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        boxSizing: "border-box", // Inclui padding na largura total
       }}
     >
       <h1 style={{ margin: 0, fontSize: "2.5rem" }}>
         Cinfães Fit & Barber
       </h1>
-      <nav style={{ fontSize: "1.5rem" }}>
+      <nav style={{ fontSize: "1.5rem", display: "flex", gap: "2rem" }}>
         <Link
           href="/"
           style={{
             color: "#fff",
-            margin: "0 2rem", // Aumentado o espaçamento entre os links
             textDecoration: "none",
           }}
         >
@@ -33,7 +41,6 @@ const Header = () => {
           href="/ginasio"
           style={{
             color: "#fff",
-            margin: "0 2rem",
             textDecoration: "none",
           }}
         >
@@ -43,18 +50,15 @@ const Header = () => {
           href="/barbearia"
           style={{
             color: "#fff",
-            margin: "0 2rem",
             textDecoration: "none",
           }}
         >
           Barbearia
         </Link>
-        {/* Link para a página de login */}
         <Link
           href="/login"
           style={{
             color: "#fff",
-            margin: "0 2rem",
             textDecoration: "none",
           }}
         >
@@ -63,6 +67,4 @@ const Header = () => {
       </nav>
     </header>
   );
-};
-
-export default Header;
+}

@@ -5,9 +5,9 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const services = [
-  { id: 1, name: "Corte de Cabelo", price: "15€" },
-  { id: 2, name: "Barba", price: "10€" },
-  { id: 3, name: "Corte + Barba", price: "20€" },
+  { id: 1, name: "Corte de Cabelo", price: "15€", description: "Corte profissional com acabamento perfeito." },
+  { id: 2, name: "Barba", price: "10€", description: "Modelagem e alinhamento da barba." },
+  { id: 3, name: "Corte + Barba", price: "20€", description: "Pacote completo de corte de cabelo e barba." },
 ];
 
 const hours = [
@@ -27,12 +27,6 @@ export default function BarbeariaPage() {
     e.preventDefault();
     console.log("Dados enviados:", formData);
     alert("Agendamento realizado com sucesso!");
-  };
-
-  // Função para validar o horário de agendamento (só entre 09:00 e 18:00)
-  const isValidTime = (time: string) => {
-    const validHours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
-    return validHours.includes(time);
   };
 
   return (
@@ -80,29 +74,32 @@ export default function BarbeariaPage() {
         >
           Serviços Disponíveis
         </h2>
-        <ul
+
+        <table
           style={{
-            listStyle: "none",
-            padding: "0",
-            fontSize: "1.5rem",
-            color: "#333",
-            textAlign: "center",
+            width: "100%",
+            maxWidth: "800px",
+            borderCollapse: "collapse",
             marginBottom: "2rem",
           }}
         >
-          {services.map((service) => (
-            <li
-              key={service.id}
-              style={{
-                marginBottom: "15px",
-                fontWeight: "bold",
-                fontSize: "1.8rem",
-              }}
-            >
-              {service.name} - <span style={{ fontWeight: "normal", color: "#2d9cdb" }}>{service.price}</span>
-            </li>
-          ))}
-        </ul>
+          <thead>
+            <tr style={{ backgroundColor: "#ddd", textAlign: "left" }}>
+              <th style={{ padding: "10px", fontSize: "1.5rem" }}>Nome</th>
+              <th style={{ padding: "10px", fontSize: "1.5rem" }}>Preço</th>
+              <th style={{ padding: "10px", fontSize: "1.5rem" }}>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            {services.map((service) => (
+              <tr key={service.id} style={{ borderBottom: "1px solid #ccc" }}>
+                <td style={{ padding: "10px", fontSize: "1.2rem" }}>{service.name}</td>
+                <td style={{ padding: "10px", fontSize: "1.2rem", color: "#2d9cdb" }}>{service.price}</td>
+                <td style={{ padding: "10px", fontSize: "1.2rem" }}>{service.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <h2
           style={{
@@ -218,14 +215,6 @@ export default function BarbeariaPage() {
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
               marginTop: "2rem",
             }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = "#005bb5";
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = "#0070f3";
-              e.currentTarget.style.transform = "scale(1)";
-            }}
           >
             Agendar
           </button>
@@ -235,29 +224,19 @@ export default function BarbeariaPage() {
           type="button"
           onClick={() => router.push("/")}
           style={{
-            marginTop: "20px",
-            padding: "15px 25px",
-            backgroundColor: "#0070f3",
-            color: "white",
+            padding: "1rem 2rem",
+            fontSize: "1.5rem",
+            backgroundColor: "#666",
+            color: "#fff",
             border: "none",
-            borderRadius: "50px",
+            borderRadius: "10px",
             cursor: "pointer",
-            fontSize: "18px",
-            fontWeight: "bold",
-            transition: "all 0.3s ease",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-            display: "inline-block",
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = "#005bb5";
-            e.currentTarget.style.transform = "scale(1.1)";
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = "#0070f3";
-            e.currentTarget.style.transform = "scale(1)";
+            transition: "background 0.3s ease, transform 0.3s ease",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            marginTop: "2rem",
           }}
         >
-          Voltar à Página Inicial
+          Voltar
         </button>
       </div>
 

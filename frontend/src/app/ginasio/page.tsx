@@ -12,13 +12,13 @@ const services = [
 ];
 
 const hours = [
-  "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"
+  "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00",
 ];
 
 export default function GinásioPage() {
-  const router = useRouter(); // Inicializa o roteador
+  const router = useRouter();
   const [formData, setFormData] = React.useState({ name: "", service: "", date: "", time: "" });
-  const [error, setError] = React.useState(""); // Adicionando estado para erros
+  const [error, setError] = React.useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -29,13 +29,12 @@ export default function GinásioPage() {
     e.preventDefault();
     const selectedTime = formData.time;
 
-    // Verifica se o horário está dentro do intervalo de 9h às 18h
     if (!hours.includes(selectedTime)) {
       setError("O horário de agendamento deve estar entre 9h e 18h.");
-      return; // Impede o envio do formulário
+      return;
     }
 
-    setError(""); // Reseta o erro caso o horário seja válido
+    setError("");
     console.log("Dados enviados:", formData);
     alert("Agendamento realizado com sucesso!");
   };
@@ -55,61 +54,26 @@ export default function GinásioPage() {
           borderBottom: "1px solid #ddd",
         }}
       >
-        <h1
-          style={{
-            fontSize: "3rem",
-            marginBottom: "1.5rem",
-            color: "#333",
-            fontWeight: "bold",
-            textTransform: "uppercase",
-          }}
-        >
+        <h1 style={{
+          fontSize: "3rem",
+          marginBottom: "1.5rem",
+          color: "#333",
+          fontWeight: "bold",
+          textTransform: "uppercase",
+        }}>
           Bem-vindo ao Ginásio
         </h1>
-        <h2
-          style={{
-            fontSize: "2rem",
-            marginBottom: "1.5rem",
-            color: "#444",
-            fontWeight: "bold",
-          }}
-        >
-          Serviços Disponíveis
-        </h2>
-        <ul
-          style={{
-            listStyle: "none",
-            padding: "0",
-            fontSize: "1.5rem",
-            color: "#333",
-            textAlign: "center",
-            marginBottom: "2rem",
-          }}
-        >
+
+        <h2 style={{ fontSize: "2rem", color: "#444", fontWeight: "bold" }}>Serviços Disponíveis</h2>
+        <ul style={{ listStyle: "none", padding: "0", fontSize: "1.5rem", color: "#333", textAlign: "center" }}>
           {services.map((service) => (
-            <li
-              key={service.id}
-              style={{
-                marginBottom: "15px",
-                fontWeight: "bold",
-                fontSize: "1.8rem",
-              }}
-            >
+            <li key={service.id} style={{ marginBottom: "15px", fontWeight: "bold", fontSize: "1.8rem" }}>
               {service.name} - <span style={{ fontWeight: "normal", color: "#2d9cdb" }}>{service.price}</span>
             </li>
           ))}
         </ul>
 
-        <h2
-          style={{
-            fontSize: "2rem",
-            marginBottom: "1.5rem",
-            color: "#444",
-            fontWeight: "bold",
-          }}
-        >
-          Agende o seu horário
-        </h2>
+        <h2 style={{ fontSize: "2rem", color: "#444", fontWeight: "bold" }}>Agende o seu horário</h2>
         <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "600px" }}>
           <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold" }}>
             Nome:
@@ -119,7 +83,6 @@ export default function GinásioPage() {
               value={formData.name}
               onChange={handleChange}
               required
-              placeholder="Seu nome"
               style={{
                 width: "100%",
                 padding: "1rem",
@@ -216,17 +179,7 @@ export default function GinásioPage() {
               border: "none",
               borderRadius: "10px",
               cursor: "pointer",
-              transition: "background 0.3s ease, transform 0.3s ease",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
               marginTop: "2rem",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = "#005bb5";
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = "#0070f3";
-              e.currentTarget.style.transform = "scale(1)";
             }}
           >
             Agendar
@@ -244,8 +197,6 @@ export default function GinásioPage() {
             border: "none",
             borderRadius: "10px",
             cursor: "pointer",
-            transition: "background 0.3s ease, transform 0.3s ease",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             marginTop: "2rem",
           }}
         >
