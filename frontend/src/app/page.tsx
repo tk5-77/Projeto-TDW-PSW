@@ -103,17 +103,19 @@ export default function Home() {
       {/* Seção "Sobre Nós" */}
       <div
         style={{
-          padding: "4rem 2rem",
+          padding: "3rem 2rem",
           background: "#ffffff",
           textAlign: "center",
           color: "#333",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-          borderRadius: "8px",
-          margin: "2rem 0",
+          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
+          borderRadius: "15px",
+          margin: "2rem auto",
+          width: "80%", // Ajustado para largura menor
+          maxWidth: "600px", // Limita a largura máxima
         }}
       >
-        <h2 style={{ fontSize: "2rem", marginBottom: "1rem", color: "#0070f3" }}>Sobre Nós</h2>
-        <p style={{ fontSize: "1.2rem", lineHeight: "1.6", color: "#555" }}>
+        <h2 style={{ fontSize: "2.5rem", marginBottom: "1.5rem", color: "#0070f3", fontWeight: "600" }}>Sobre Nós</h2>
+        <p style={{ fontSize: "1.3rem", lineHeight: "1.8", color: "#555", marginBottom: "1.5rem" }}>
           Somos uma empresa dedicada a oferecer os melhores serviços para o seu bem-estar e conforto.
           Com um ginásio moderno e uma barbearia de estilo único, garantimos qualidade e uma experiência única para cada cliente.
         </p>
@@ -122,20 +124,27 @@ export default function Home() {
       {/* Seção "Contacte-nos" */}
       <div
         style={{
-          padding: "4rem 2rem",
+          padding: "3rem 2rem",
           background: "#f7f7f7",
           textAlign: "center",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-          borderRadius: "8px",
+          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
+          borderRadius: "15px",
+          margin: "2rem auto",
+          width: "80%", // Ajustado para largura menor
+          maxWidth: "600px", // Limita a largura máxima
         }}
       >
-        <h2 style={{ fontSize: "2rem", marginBottom: "1rem", color: "#0070f3" }}>Contacte-nos</h2>
-        <p style={{ fontSize: "1.2rem", marginBottom: "1.5rem", color: "#555" }}>
+        <h2 style={{ fontSize: "2.5rem", marginBottom: "1.5rem", color: "#0070f3", fontWeight: "600" }}>Contacte-nos</h2>
+        <p style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#555" }}>
           Se tiver alguma dúvida ou deseja mais informações, não hesite em entrar em contato conosco!
         </p>
         <div>
-          <p style={{ fontSize: "1.2rem", color: "#333" }}>Email: <span style={{ color: "#0070f3" }}>contato@exemplo.com</span></p>
-          <p style={{ fontSize: "1.2rem", color: "#333" }}>Telefone: <span style={{ color: "#0070f3" }}>(11) 1234-5678</span></p>
+          <p style={{ fontSize: "1.3rem", color: "#333" }}>
+            Email: <span style={{ color: "#0070f3" }}>contato@exemplo.com</span>
+          </p>
+          <p style={{ fontSize: "1.3rem", color: "#333" }}>
+            Telefone: <span style={{ color: "#0070f3" }}>(11) 1234-5678</span>
+          </p>
         </div>
       </div>
 

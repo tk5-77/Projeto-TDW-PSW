@@ -143,31 +143,21 @@ export default function LoginPage() {
 
         <button
           type="button"
-          onClick={() => router.push("/")} // Link para página inicial
+          onClick={() => router.push("/")}
           style={{
-            marginTop: "20px",
-            padding: "15px 25px",
-            backgroundColor: "#0070f3",
-            color: "white",
+            padding: "1rem 2rem",
+            fontSize: "1.5rem",
+            backgroundColor: "#666",
+            color: "#fff",
             border: "none",
-            borderRadius: "50px",
+            borderRadius: "10px",
             cursor: "pointer",
-            fontSize: "18px",
-            fontWeight: "bold",
-            transition: "all 0.3s ease",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-            display: "inline-block",
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = "#005bb5";
-            e.currentTarget.style.transform = "scale(1.1)";
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = "#0070f3";
-            e.currentTarget.style.transform = "scale(1)";
+            transition: "background 0.3s ease, transform 0.3s ease",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            marginTop: "2rem",
           }}
         >
-          Voltar à Página Inicial
+          Voltar
         </button>
 
       </div>
