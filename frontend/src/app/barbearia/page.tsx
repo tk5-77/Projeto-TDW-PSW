@@ -101,6 +101,31 @@ export default function BarbeariaPage() {
           </tbody>
         </table>
 
+        <div
+          style={{
+            display: "flex",
+            gap: "2rem",
+            justifyContent: "center",
+            marginBottom: "2rem",
+          }}
+        >
+          {services.map((service) => (
+            <div key={service.id} style={{ textAlign: "center" }}>
+              <img
+                src={`/images/${service.name.toLowerCase().replace(" ", "-")}.jpg`}
+                alt={service.name}
+                style={{
+                  width: "150px",
+                  height: "150px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                }}
+              />
+              <p style={{ fontSize: "1.2rem", marginTop: "1rem" }}>{service.name}</p>
+            </div>
+          ))}
+        </div>
+
         <h2
           style={{
             fontSize: "2rem",
@@ -233,13 +258,12 @@ export default function BarbeariaPage() {
             cursor: "pointer",
             transition: "background 0.3s ease, transform 0.3s ease",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            marginTop: "2rem",
+            marginTop: "1rem",
           }}
         >
-          Voltar
+          Voltar ao Menu Principal
         </button>
       </div>
-
       <Footer />
     </div>
   );
