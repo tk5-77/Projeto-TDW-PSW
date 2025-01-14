@@ -1,42 +1,59 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import Header from "./componentsPaginaInicial/Header"; // Importando Header
-import Footer from "./componentsPaginaInicial/Footer"; // Importando Footer
+import Header from "./componentsPaginaInicial/Header";
+import Footer from "./componentsPaginaInicial/Footer";
 
 export default function Home() {
   useEffect(() => {
-    document.body.style.overflowX = "hidden"; // Impede o scroll horizontal
+    document.body.style.overflowX = "hidden";
     return () => {
-      document.body.style.overflowX = "auto"; // Restaura o scroll ao desmontar o componente
+      document.body.style.overflowX = "auto";
     };
   }, []);
 
+  // Definindo estados para controlar os cliques nas caixas
+  const [clickedSobreNos, setClickedSobreNos] = useState(false);
+  const [clickedContateNos, setClickedContateNos] = useState(false);
+
+  // Funções para controlar o clique
+  const handleClickSobreNos = () => {
+    setClickedSobreNos(!clickedSobreNos);
+  };
+
+  const handleClickContateNos = () => {
+    setClickedContateNos(!clickedContateNos);
+  };
+
   return (
-    <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
+    <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", margin: 0, padding: 0, backgroundColor: "#ffffff" }}>
       <Header /> {/* Inserindo o Header */}
-      
+
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          height: "60vh", // Ajustado para dar espaço para o footer
+          height: "70vh",
           gap: "2rem",
-          background: "#f0f0f0",
-          padding: "2rem",
-          borderBottom: "1px solid #ddd", // Adicionando uma linha sutil separando a seção
+          background: "#f0f0f0", // Cor de fundo suave
+          padding: "3rem",
+          borderBottom: "1px solid #ddd", // Divisória suave entre as seções
+          borderRadius: "15px",
+          boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)",
         }}
       >
         <h1
           style={{
-            fontSize: "3rem",
+            fontSize: "3.5rem",
             marginBottom: "1.5rem",
-            color: "#333",
+            color: "#333", // Cor de texto mais forte
             fontWeight: "bold",
             textTransform: "uppercase",
+            letterSpacing: "2px",
+            textShadow: "2px 2px 6px rgba(0, 0, 0, 0.1)",
           }}
         >
           Bem-vindo!
@@ -49,22 +66,22 @@ export default function Home() {
           <Link href="/ginasio">
             <button
               style={{
-                padding: "1rem 2rem",
-                fontSize: "1.5rem",
-                background: "#0070f3",
+                padding: "1.2rem 2.5rem",
+                fontSize: "1.6rem",
+                background: "#0070f3", // Cor azul
                 color: "#fff",
                 border: "none",
-                borderRadius: "10px",
+                borderRadius: "25px",
                 cursor: "pointer",
                 transition: "background 0.3s ease, transform 0.3s ease",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.background = "#005bb5";
+                e.currentTarget.style.background = "#005bb5"; // Cor mais escura no hover
                 e.currentTarget.style.transform = "scale(1.05)";
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.background = "#0070f3";
+                e.currentTarget.style.background = "#0070f3"; // Cor inicial
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
@@ -75,22 +92,22 @@ export default function Home() {
           <Link href="/barbearia">
             <button
               style={{
-                padding: "1rem 2rem",
-                fontSize: "1.5rem",
-                background: "#0070f3",
+                padding: "1.2rem 2.5rem",
+                fontSize: "1.6rem",
+                background: "#0070f3", // Cor azul
                 color: "#fff",
                 border: "none",
-                borderRadius: "10px",
+                borderRadius: "25px",
                 cursor: "pointer",
                 transition: "background 0.3s ease, transform 0.3s ease",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.background = "#005bb5";
+                e.currentTarget.style.background = "#005bb5"; // Cor mais escura no hover
                 e.currentTarget.style.transform = "scale(1.05)";
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.background = "#0070f3";
+                e.currentTarget.style.background = "#0070f3"; // Cor inicial
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
@@ -100,52 +117,83 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Seção "Sobre Nós" */}
       <div
+        onClick={handleClickSobreNos}
         style={{
-          padding: "3rem 2rem",
-          background: "#ffffff",
-          textAlign: "center",
-          color: "#333",
-          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
-          borderRadius: "15px",
-          margin: "2rem auto",
-          width: "80%", // Ajustado para largura menor
-          maxWidth: "600px", // Limita a largura máxima
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "40vh",
+          gap: "2rem",
+          background: "#ffffff", // Fundo branco
+          padding: "2rem",
+          borderBottom: "1px solid #ddd",
+          maxWidth: "800px", // Diminuindo a largura máxima
+          width: "100%", // Garantir que a largura se ajuste no mobile
+          margin: "0 auto", // Centralizando horizontalmente
+          borderRadius: "15px", // Bordas arredondadas
+          boxShadow: clickedSobreNos ? "0 8px 24px rgba(0, 0, 0, 0.2)" : "0 4px 12px rgba(0, 0, 0, 0.1)", // Sombra maior ao clicar
+          transform: clickedSobreNos ? "scale(1.05)" : "scale(1)", // Aumenta a caixa quando clicada
+          transition: "all 0.3s ease", // Transição suave
+          textAlign: "center", // Alinhamento centralizado do texto
         }}
       >
-        <h2 style={{ fontSize: "2.5rem", marginBottom: "1.5rem", color: "#0070f3", fontWeight: "600" }}>Sobre Nós</h2>
-        <p style={{ fontSize: "1.3rem", lineHeight: "1.8", color: "#555", marginBottom: "1.5rem" }}>
-          Somos uma empresa dedicada a oferecer os melhores serviços para o seu bem-estar e conforto.
-          Com um ginásio moderno e uma barbearia de estilo único, garantimos qualidade e uma experiência única para cada cliente.
+        <h2
+          style={{
+            fontSize: "2rem",
+            marginBottom: "1rem",
+            color: "#333", // Cor de texto mais forte
+            fontWeight: "bold",
+            textTransform: "uppercase",
+          }}
+        >
+          Sobre nós
+        </h2>
+        <p style={{ fontSize: "1.2rem", color: "#555", marginBottom: "2rem" }}>
+          Somos uma empresa que oferece serviços de ginásio e barbearia de alta qualidade. Nosso objetivo é fornecer um ambiente seguro e acolhedor para que nossos clientes possam alcançar seus objetivos de saúde e bem-estar.
         </p>
       </div>
 
-      {/* Seção "Contacte-nos" */}
       <div
+        onClick={handleClickContateNos}
         style={{
-          padding: "3rem 2rem",
-          background: "#f7f7f7",
-          textAlign: "center",
-          boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
-          borderRadius: "15px",
-          margin: "2rem auto",
-          width: "80%", // Ajustado para largura menor
-          maxWidth: "600px", // Limita a largura máxima
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "40vh",
+          gap: "2rem",
+          background: "#ffffff", // Fundo branco
+          padding: "2rem",
+          borderBottom: "1px solid #ddd",
+          maxWidth: "800px", // Diminuindo a largura máxima
+          width: "100%", // Garantir que a largura se ajuste no mobile
+          margin: "0 auto", // Centralizando horizontalmente
+          borderRadius: "15px", // Bordas arredondadas
+          boxShadow: clickedContateNos ? "0 8px 24px rgba(0, 0, 0, 0.2)" : "0 4px 12px rgba(0, 0, 0, 0.1)", // Sombra maior ao clicar
+          transform: clickedContateNos ? "scale(1.05)" : "scale(1)", // Aumenta a caixa quando clicada
+          transition: "all 0.3s ease", // Transição suave
+          textAlign: "center", // Alinhamento centralizado do texto
         }}
       >
-        <h2 style={{ fontSize: "2.5rem", marginBottom: "1.5rem", color: "#0070f3", fontWeight: "600" }}>Contacte-nos</h2>
-        <p style={{ fontSize: "1.3rem", marginBottom: "1.5rem", color: "#555" }}>
-          Se tiver alguma dúvida ou deseja mais informações, não hesite em entrar em contato conosco!
+        <h2
+          style={{
+            fontSize: "2rem",
+            marginBottom: "1rem",
+            color: "#333", // Cor de texto mais forte
+            fontWeight: "bold",
+            textTransform: "uppercase",
+          }}
+        >
+          Contate-nos
+        </h2>
+        <p style={{ fontSize: "1.2rem", color: "#555", marginBottom: "1rem" }}>
+          Se você tiver alguma dúvida ou precisar de mais informações, não hesite em nos contatar. Estamos aqui para ajudar!
         </p>
-        <div>
-          <p style={{ fontSize: "1.3rem", color: "#333" }}>
-            Email: <span style={{ color: "#0070f3" }}>contato@exemplo.com</span>
-          </p>
-          <p style={{ fontSize: "1.3rem", color: "#333" }}>
-            Telefone: <span style={{ color: "#0070f3" }}>(11) 1234-5678</span>
-          </p>
-        </div>
+        <p style={{ fontSize: "1.2rem", color: "#555" }}>
+          Email: contato@empresa.com | Telefone: (11) 1234-5678
+        </p>
       </div>
 
       <Footer /> {/* Inserindo o Footer */}
