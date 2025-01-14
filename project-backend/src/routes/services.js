@@ -6,3 +6,5 @@ const router = express.Router();
 router.post('/:entityId', auth, checkRole('AdminEntity'), serviceController.create);
 router.post('/:serviceId/slots', auth, checkRole('AdminEntity', 'UserEntity'), serviceController.createSlot);
 router.get('/:serviceId/slots', auth, serviceController.getAvailableSlots);
+
+module.exports = router;

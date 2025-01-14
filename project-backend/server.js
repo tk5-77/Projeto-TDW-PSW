@@ -29,7 +29,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/entities', entitiesRoutes);
 app.use('/api/services', serviceRoutes);
-app.use('/api/bookings', bookingRoutes);
+//app.use('/api/bookings', bookingRoutes);
 
 //Error Handler
 app.use(errorHandler);
@@ -38,4 +38,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
