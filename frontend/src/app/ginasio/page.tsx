@@ -4,29 +4,77 @@ import { useRouter } from "next/navigation"; // Importação do useRouter
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+// Serviços
 const services = [
   { id: 1, name: "Treino Personalizado", price: "30€", description: "Plano de treino personalizado para os seus objetivos." },
   { id: 2, name: "Aulas de Grupo", price: "20€", description: "Aulas dinâmicas em grupo, como yoga, pilates, entre outras." },
   { id: 3, name: "Plano de Nutrição", price: "40€", description: "Consultoria nutricional para apoiar seu treino e bem-estar." },
 ];
 
-const hours = [
-  "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"
+// Criação de slots de meia em meia hora (das 09:00 às 17:30)
+// Repare que, na lista original, alguns horários foram removidos
+// ou substituídos. Ajuste conforme a sua necessidade.
+const halfHourSlots = [
+  "09:00", "09:30",
+  "10:00", "10:30",
+  "11:00", "11:30",
+  "12:00", "14:00",
+  "14:30", "15:00",
+  "15:30", "16:00",
+  "16:30", "17:00",
+  "17:30",
 ];
+
+// Cada slot terá a estrutura { time: string, isAvailable: boolean }
+const initialSlots = halfHourSlots.map((time) => ({
+  time,
+  isAvailable: true,
+}));
 
 export default function GinasioPage() {
   const router = useRouter(); // Inicializa o roteador
-  const [formData, setFormData] = React.useState({ name: "", service: "", date: "", time: "" });
 
+  // Estado que controla a disponibilidade dos horários
+  const [slots, setSlots] = React.useState(initialSlots);
+
+  // Estado do formulário
+  const [formData, setFormData] = React.useState({
+    name: "",
+    service: "",
+    date: "",
+    time: "",
+  });
+
+  // Lida com mudanças nos campos de input/select
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Lida com envio do formulário
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Verifica se os campos essenciais estão preenchidos
+    if (!formData.name || !formData.service || !formData.date || !formData.time) {
+      alert("Por favor, preencha todos os campos antes de agendar.");
+      return;
+    }
+
+    // Marca o slot escolhido como indisponível
+    setSlots((prevSlots) =>
+      prevSlots.map((slot) =>
+        slot.time === formData.time
+          ? { ...slot, isAvailable: false }
+          : slot
+      )
+    );
+
     console.log("Dados enviados:", formData);
-    alert("Agendamento realizado com sucesso!");
+    alert(`Agendamento realizado com sucesso!\nHorário: ${formData.time}`);
+
+    // (Opcional) Limpa os campos do formulário
+    setFormData({ name: "", service: "", date: "", time: "" });
   };
 
   return (
@@ -64,6 +112,7 @@ export default function GinasioPage() {
         >
           Bem-vindo ao Ginásio
         </h1>
+
         <h2
           style={{
             fontSize: "2rem",
@@ -101,6 +150,44 @@ export default function GinasioPage() {
           </tbody>
         </table>
 
+        {/* Mapa de Vagas (Disponível / Indisponível) */}
+        <h3
+          style={{
+            fontSize: "1.8rem",
+            color: "#333",
+            marginBottom: "1rem",
+          }}
+        >
+          Mapa de Vagas
+        </h3>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "1rem",
+            justifyContent: "center",
+            marginBottom: "2rem",
+          }}
+        >
+          {slots.map((slot) => (
+            <div
+              key={slot.time}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                padding: "0.5rem 1rem",
+                backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1",
+                minWidth: "80px",
+                textAlign: "center",
+              }}
+            >
+              <strong>{slot.time}</strong>
+              <br />
+              {slot.isAvailable ? "Disponível" : "Indisponível"}
+            </div>
+          ))}
+        </div>
+
         <h2
           style={{
             fontSize: "2rem",
@@ -132,7 +219,14 @@ export default function GinasioPage() {
             />
           </label>
 
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginTop: "1rem",
+            }}
+          >
             Serviço:
             <select
               name="service"
@@ -157,7 +251,14 @@ export default function GinasioPage() {
             </select>
           </label>
 
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginTop: "1rem",
+            }}
+          >
             Data:
             <input
               type="date"
@@ -176,7 +277,15 @@ export default function GinasioPage() {
             />
           </label>
 
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
+          {/* SELECT que exibe TODOS os horários, mas desabilita os indisponíveis */}
+          <label
+            style={{
+              display: "block",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginTop: "1rem",
+            }}
+          >
             Hora:
             <select
               name="time"
@@ -193,11 +302,14 @@ export default function GinasioPage() {
               }}
             >
               <option value="">Selecione uma hora</option>
-              {hours.map((hour) => (
-                <option key={hour} value={hour}>
-                  {hour}
-                </option>
-              ))}
+              {slots.map((slot) =>
+                slot.isAvailable ? (
+                  // Só exibe a opção se estiver disponível
+                  <option key={slot.time} value={slot.time}>
+                    {slot.time}
+                  </option>
+                ) : null
+              )}
             </select>
           </label>
 

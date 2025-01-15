@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation"; // Importação do useRouter
+import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -10,33 +11,78 @@ const services = [
   { id: 3, name: "Corte + Barba", price: "20€", description: "Pacote completo de corte de cabelo e barba." },
 ];
 
-const hours = [
-  "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"
+// Cria os horários de meia em meia hora (das 9h até 17h30, por exemplo)
+const halfHourSlots = [
+  "09:00", "09:30",
+  "10:00", "10:30",
+  "11:00", "11:30",
+  "12:00", "14:00", 
+  "14:30","15:00", 
+  "15:30","16:00",
+  "16:30","17:00", 
+  "17:30",
 ];
 
-export default function BarbeariaPage() {
-  const router = useRouter(); // Inicializa o roteador
-  const [formData, setFormData] = React.useState({ name: "", service: "", date: "", time: "" });
+// Cada objeto terá a estrutura { time: string, isAvailable: boolean }
+const initialSlots = halfHourSlots.map((time) => ({
+  time,
+  isAvailable: true,
+}));
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+export default function BarbeariaPage() {
+  const router = useRouter();
+
+  // Estado que controla as vagas (mapa de vagas)
+  const [slots, setSlots] = React.useState(initialSlots);
+
+  // Estado do formulário
+  const [formData, setFormData] = React.useState({
+    name: "",
+    service: "",
+    date: "",
+    time: "",
+  });
+
+  // Lida com mudanças nos campos de input/select
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Lida com envio do formulário
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Se não houver serviço, data ou hora selecionados, parar aqui
+    if (!formData.name || !formData.service || !formData.date || !formData.time) {
+      alert("Por favor, preencha todos os campos antes de agendar.");
+      return;
+    }
+
+    // Atualiza a disponibilidade do horário selecionado
+    setSlots((prevSlots) =>
+      prevSlots.map((slot) =>
+        slot.time === formData.time ? { ...slot, isAvailable: false } : slot
+      )
+    );
+
     console.log("Dados enviados:", formData);
-    alert("Agendamento realizado com sucesso!");
+    alert(`Agendamento realizado com sucesso!\nHorário: ${formData.time}`);
+
+    // (Opcional) Resetar o formulário
+    setFormData({ name: "", service: "", date: "", time: "" });
   };
 
   return (
     <div
       style={{
         fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        width: "100%", // Garante que a largura ocupa 100% da tela
-        height: "100vh", // Garante que a altura ocupa 100% da altura da tela
-        margin: 0, // Remove margens padrão
-        overflowX: "hidden", // Desabilita o scroll lateral
+        width: "100%",
+        height: "100vh",
+        margin: 0,
+        overflowX: "hidden",
       }}
     >
       <Header />
@@ -50,7 +96,7 @@ export default function BarbeariaPage() {
           padding: "2rem",
           background: "#f0f0f0",
           borderBottom: "1px solid #ddd",
-          width: "100%", // Garante que o conteúdo principal ocupe toda a largura
+          width: "100%",
         }}
       >
         <h1
@@ -64,6 +110,7 @@ export default function BarbeariaPage() {
         >
           Bem-vindo à Barbearia
         </h1>
+
         <h2
           style={{
             fontSize: "2rem",
@@ -93,35 +140,54 @@ export default function BarbeariaPage() {
           <tbody>
             {services.map((service) => (
               <tr key={service.id} style={{ borderBottom: "1px solid #ccc" }}>
-                <td style={{ padding: "10px", fontSize: "1.2rem" }}>{service.name}</td>
-                <td style={{ padding: "10px", fontSize: "1.2rem", color: "#2d9cdb" }}>{service.price}</td>
-                <td style={{ padding: "10px", fontSize: "1.2rem" }}>{service.description}</td>
+                <td style={{ padding: "10px", fontSize: "1.2rem" }}>
+                  {service.name}
+                </td>
+                <td style={{ padding: "10px", fontSize: "1.2rem", color: "#2d9cdb" }}>
+                  {service.price}
+                </td>
+                <td style={{ padding: "10px", fontSize: "1.2rem" }}>
+                  {service.description}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
 
+        {/* Mapa de Vagas (Disponível / Indisponível) */}
+        <h3
+          style={{
+            fontSize: "1.8rem",
+            color: "#333",
+            marginBottom: "1rem",
+          }}
+        >
+          Mapa de Vagas
+        </h3>
         <div
           style={{
             display: "flex",
-            gap: "2rem",
+            flexWrap: "wrap",
+            gap: "1rem",
             justifyContent: "center",
             marginBottom: "2rem",
           }}
         >
-          {services.map((service) => (
-            <div key={service.id} style={{ textAlign: "center" }}>
-              <img
-                src={`/images/${service.name.toLowerCase().replace(" ", "-")}.jpg`}
-                alt={service.name}
-                style={{
-                  width: "150px",
-                  height: "150px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-              <p style={{ fontSize: "1.2rem", marginTop: "1rem" }}>{service.name}</p>
+          {slots.map((slot) => (
+            <div
+              key={slot.time}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                padding: "0.5rem 1rem",
+                backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1",
+                minWidth: "80px",
+                textAlign: "center",
+              }}
+            >
+              <strong>{slot.time}</strong>
+              <br />
+              {slot.isAvailable ? "Disponível" : "Indisponível"}
             </div>
           ))}
         </div>
@@ -136,8 +202,13 @@ export default function BarbeariaPage() {
         >
           Agende o seu horário
         </h2>
-        <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "600px" }}>
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold" }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ width: "100%", maxWidth: "600px" }}
+        >
+          <label
+            style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold" }}
+          >
             Nome:
             <input
               type="text"
@@ -157,7 +228,14 @@ export default function BarbeariaPage() {
             />
           </label>
 
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginTop: "1rem",
+            }}
+          >
             Serviço:
             <select
               name="service"
@@ -182,7 +260,14 @@ export default function BarbeariaPage() {
             </select>
           </label>
 
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginTop: "1rem",
+            }}
+          >
             Data:
             <input
               type="date"
@@ -201,7 +286,14 @@ export default function BarbeariaPage() {
             />
           </label>
 
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              marginTop: "1rem",
+            }}
+          >
             Hora:
             <select
               name="time"
@@ -218,11 +310,13 @@ export default function BarbeariaPage() {
               }}
             >
               <option value="">Selecione uma hora</option>
-              {hours.map((hour) => (
-                <option key={hour} value={hour}>
-                  {hour}
-                </option>
-              ))}
+              {slots.map((slot) =>
+                slot.isAvailable ? (
+                  <option key={slot.time} value={slot.time}>
+                    {slot.time}
+                  </option>
+                ) : null
+              )}
             </select>
           </label>
 
