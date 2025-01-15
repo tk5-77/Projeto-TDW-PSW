@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -6,36 +5,43 @@ import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 // IMPORT do cliente de API (Axios)
-import API from "../services/api"
+import API from "../services/api";
 
-const services = [
-  { id: 1, name: "Corte de Cabelo", price: "15€", description: "Corte profissional com acabamento perfeito." },
-  { id: 2, name: "Barba", price: "10€", description: "Modelagem e alinhamento da barba." },
-  { id: 3, name: "Corte + Barba", price: "20€", description: "Pacote completo de corte de cabelo e barba." },
-];
-
-// Cria os horários de meia em meia hora (das 9h até 17h30)
-const halfHourSlots = [
+// Criamos 2 grupos de horários para o Accordion:
+// (Manhã) e (Tarde)
+const manhaSlots = [
   "09:00", "09:30",
   "10:00", "10:30",
   "11:00", "11:30",
-  "12:00", "14:00", 
-  "14:30","15:00", 
-  "15:30","16:00",
-  "16:30","17:00", 
-  "17:30",
+  "12:00"
 ];
 
-// Cada objeto terá a estrutura { time: string, isAvailable: boolean }
-const initialSlots = halfHourSlots.map((time) => ({
-  time,
-  isAvailable: true,
-}));
+const tardeSlots = [
+  "14:00", "14:30",
+  "15:00", "15:30",
+  "16:00", "16:30",
+  "17:00", "17:30",
+];
+
+// Função utilitária para transformar array de strings em
+// [{ time: "09:00", isAvailable: true }, ...]
+function createSlotObjects(times: string[]) {
+  return times.map((time) => ({
+    time,
+    isAvailable: true,
+  }));
+}
+
+// Agrupa todos os slots em um objeto
+const initialMapa = {
+  manha: createSlotObjects(manhaSlots),
+  tarde: createSlotObjects(tardeSlots),
+};
 
 export default function BarbeariaPage() {
   const router = useRouter();
 
-  const [slots, setSlots] = React.useState(initialSlots);
+  // Estado geral do formulário
   const [formData, setFormData] = React.useState({
     name: "",
     service: "",
@@ -43,15 +49,40 @@ export default function BarbeariaPage() {
     time: "",
   });
 
-  // Lida com mudanças nos campos
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  // Estado que controla o "mapa de vagas" em formato de objeto
+  // {
+  //   manha: [ { time: "09:00", isAvailable: true }, ... ],
+  //   tarde: [ { time: "14:00", isAvailable: true }, ... ]
+  // }
+  const [mapa, setMapa] = React.useState(initialMapa);
+
+  // Estado que controla qual "Accordion" está aberto:
+  // manha ou tarde (ou nenhum)
+  const [openAccordion, setOpenAccordion] = React.useState<string | null>(null);
+
+  // Mock de serviços
+  const services = [
+    { id: 1, name: "Corte de Cabelo", price: "15€", description: "Corte profissional com acabamento perfeito." },
+    { id: 2, name: "Barba", price: "10€", description: "Modelagem e alinhamento da barba." },
+    { id: 3, name: "Corte + Barba", price: "20€", description: "Pacote completo de corte de cabelo e barba." },
+  ];
+
+  // Lida com mudanças no formulário
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Lida com envio do formulário
+  // Abre/fecha cada accordion
+  const toggleAccordion = (section: string) => {
+    // se clicar na mesma, fecha
+    if (openAccordion === section) {
+      setOpenAccordion(null);
+    } else {
+      setOpenAccordion(section);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -60,23 +91,40 @@ export default function BarbeariaPage() {
       return;
     }
 
-    // Exemplo de chamada à API do backend
     try {
-      // Supondo que sua rota no backend seja POST /api/bookings
-      // Ajuste conforme necessário (p. ex. "/api/barbearia/bookings")
+      // Supondo que sua rota seja /bookings
       const res = await API.post("/bookings", formData);
 
       console.log("Dados enviados ao backend:", res.data);
       alert(`Agendamento realizado com sucesso!\nHorário: ${formData.time}`);
 
       // Marca localmente o slot como indisponível
-      setSlots((prevSlots) =>
-        prevSlots.map((slot) =>
-          slot.time === formData.time ? { ...slot, isAvailable: false } : slot
-        )
-      );
+      // Precisamos achar a secção (manha / tarde) que contém esse "time"
+      const slotTime = formData.time; // ex: "09:00"
+      let sectionFound: "manha" | "tarde" | null = null;
 
-      // (Opcional) Resetar formulário
+      // Verifica se está em manha
+      if (mapa.manha.some((s) => s.time === slotTime)) {
+        sectionFound = "manha";
+      } else if (mapa.tarde.some((s) => s.time === slotTime)) {
+        sectionFound = "tarde";
+      }
+
+      if (sectionFound) {
+        setMapa((prev) => {
+          const updatedSection = prev[sectionFound!].map((slot) =>
+            slot.time === slotTime
+              ? { ...slot, isAvailable: false }
+              : slot
+          );
+          return {
+            ...prev,
+            [sectionFound!]: updatedSection,
+          };
+        });
+      }
+
+      // Reset do formulário
       setFormData({ name: "", service: "", date: "", time: "" });
     } catch (err) {
       console.error("Erro ao enviar ao backend:", err);
@@ -149,21 +197,15 @@ export default function BarbeariaPage() {
           <tbody>
             {services.map((service) => (
               <tr key={service.id} style={{ borderBottom: "1px solid #ccc" }}>
-                <td style={{ padding: "10px", fontSize: "1.2rem" }}>
-                  {service.name}
-                </td>
-                <td style={{ padding: "10px", fontSize: "1.2rem", color: "#2d9cdb" }}>
-                  {service.price}
-                </td>
-                <td style={{ padding: "10px", fontSize: "1.2rem" }}>
-                  {service.description}
-                </td>
+                <td style={{ padding: "10px", fontSize: "1.2rem" }}>{service.name}</td>
+                <td style={{ padding: "10px", fontSize: "1.2rem", color: "#2d9cdb" }}>{service.price}</td>
+                <td style={{ padding: "10px", fontSize: "1.2rem" }}>{service.description}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {/* Mapa de Vagas */}
+        {/* Accordion - Mapa de Vagas */}
         <h3
           style={{
             fontSize: "1.8rem",
@@ -171,36 +213,104 @@ export default function BarbeariaPage() {
             marginBottom: "1rem",
           }}
         >
-          Mapa de Vagas
+          Vagas
         </h3>
+
+        {/* Accordion Section - Manhã */}
         <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "1rem",
-            justifyContent: "center",
-            marginBottom: "2rem",
+            width: "100%",
+            maxWidth: "600px",
+            marginBottom: "1rem",
+            borderRadius: "8px",
+            overflow: "hidden",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
-          {slots.map((slot) => (
-            <div
-              key={slot.time}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "0.5rem 1rem",
-                backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1",
-                minWidth: "80px",
-                textAlign: "center",
-              }}
-            >
-              <strong>{slot.time}</strong>
-              <br />
-              {slot.isAvailable ? "Disponível" : "Indisponível"}
+          <button
+            onClick={() => toggleAccordion("manha")}
+            style={{
+              width: "100%",
+              backgroundColor: "#0070f3",
+              color: "#fff",
+              textAlign: "left",
+              padding: "1rem",
+              fontSize: "1.2rem",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Manhã
+          </button>
+          {openAccordion === "manha" && (
+            <div style={{ backgroundColor: "#fff", padding: "1rem" }}>
+              {mapa.manha.map((slot) => (
+                <div
+                  key={slot.time}
+                  style={{
+                    marginBottom: "0.5rem",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    padding: "0.5rem",
+                    backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1",
+                  }}
+                >
+                  <strong>{slot.time}</strong> -{" "}
+                  {slot.isAvailable ? "Disponível" : "Indisponível"}
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
 
+        {/* Accordion Section - Tarde */}
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "600px",
+            marginBottom: "2rem",
+            borderRadius: "8px",
+            overflow: "hidden",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <button
+            onClick={() => toggleAccordion("tarde")}
+            style={{
+              width: "100%",
+              backgroundColor: "#0070f3",
+              color: "#fff",
+              textAlign: "left",
+              padding: "1rem",
+              fontSize: "1.2rem",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Tarde
+          </button>
+          {openAccordion === "tarde" && (
+            <div style={{ backgroundColor: "#fff", padding: "1rem" }}>
+              {mapa.tarde.map((slot) => (
+                <div
+                  key={slot.time}
+                  style={{
+                    marginBottom: "0.5rem",
+                    border: "1px solid #ccc",
+                    borderRadius: "5px",
+                    padding: "0.5rem",
+                    backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1",
+                  }}
+                >
+                  <strong>{slot.time}</strong> -{" "}
+                  {slot.isAvailable ? "Disponível" : "Indisponível"}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Formulário de Agendamento */}
         <h2
           style={{
             fontSize: "2rem",
@@ -319,13 +429,17 @@ export default function BarbeariaPage() {
               }}
             >
               <option value="">Selecione uma hora</option>
-              {slots.map((slot) =>
-                slot.isAvailable ? (
+              {/* 
+                Faremos um "map" geral: junta manha + tarde
+                e filtra os que estão disponíveis 
+              */}
+              {[...mapa.manha, ...mapa.tarde]
+                .filter((slot) => slot.isAvailable)
+                .map((slot) => (
                   <option key={slot.time} value={slot.time}>
                     {slot.time}
                   </option>
-                ) : null
-              )}
+                ))}
             </select>
           </label>
 

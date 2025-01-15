@@ -1,40 +1,46 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation"; // Importação do useRouter
+import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-// IMPORT do cliente de API
+// IMPORT do cliente de API (Axios)
 import API from "../services/api";
 
-// Serviços
-const services = [
-  { id: 1, name: "Treino Personalizado", price: "30€", description: "Plano de treino personalizado para os seus objetivos." },
-  { id: 2, name: "Aulas de Grupo", price: "20€", description: "Aulas dinâmicas em grupo, como yoga, pilates, entre outras." },
-  { id: 3, name: "Plano de Nutrição", price: "40€", description: "Consultoria nutricional para apoiar seu treino e bem-estar." },
-];
-
-// Criação de slots de meia em meia hora (das 09:00 às 17:30)
-const halfHourSlots = [
+// Criamos 2 grupos de horários para o Accordion:
+// (Manhã) e (Tarde)
+const manhaSlots = [
   "09:00", "09:30",
   "10:00", "10:30",
   "11:00", "11:30",
-  "12:00", "14:00",
-  "14:30", "15:00",
-  "15:30", "16:00",
-  "16:30", "17:00",
-  "17:30",
+  "12:00"
 ];
 
-// Cada slot terá { time: string, isAvailable: boolean }
-const initialSlots = halfHourSlots.map((time) => ({
-  time,
-  isAvailable: true,
-}));
+const tardeSlots = [
+  "14:00", "14:30",
+  "15:00", "15:30",
+  "16:00", "16:30",
+  "17:00", "17:30",
+];
+
+// Função utilitária para transformar array de strings em
+// [{ time: "09:00", isAvailable: true }, ...]
+function createSlotObjects(times: string[]) {
+  return times.map((time) => ({
+    time,
+    isAvailable: true,
+  }));
+}
+
+// Agrupa todos os slots em um objeto
+const initialMapa = {
+  manha: createSlotObjects(manhaSlots),
+  tarde: createSlotObjects(tardeSlots),
+};
 
 export default function GinasioPage() {
   const router = useRouter();
 
-  const [slots, setSlots] = React.useState(initialSlots);
+  // Estado geral do formulário
   const [formData, setFormData] = React.useState({
     name: "",
     service: "",
@@ -42,9 +48,33 @@ export default function GinasioPage() {
     time: "",
   });
 
+  // Estado que controla o "mapa de vagas" em formato de objeto
+  const [mapa, setMapa] = React.useState(initialMapa);
+
+  // Estado que controla qual "Accordion" está aberto:
+  const [openAccordion, setOpenAccordion] = React.useState<string | null>(null);
+
+  // Mock de serviços
+  const services = [
+    { id: 1, name: "Treino Personalizado", price: "30€", description: "Plano de treino personalizado para os seus objetivos." },
+    { id: 2, name: "Aulas de Grupo", price: "20€", description: "Aulas dinâmicas em grupo, como yoga, pilates, entre outras." },
+    { id: 3, name: "Plano de Nutrição", price: "40€", description: "Consultoria nutricional para apoiar seu treino e bem-estar." },
+  ];
+
+  // Lida com mudanças no formulário
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  // Abre/fecha cada accordion
+  const toggleAccordion = (section: string) => {
+    // se clicar na mesma, fecha
+    if (openAccordion === section) {
+      setOpenAccordion(null);
+    } else {
+      setOpenAccordion(section);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,81 +86,49 @@ export default function GinasioPage() {
     }
 
     try {
-      // Exemplo de rota no backend. Ajuste conforme necessário.
       const res = await API.post("/bookings", formData);
       console.log("Dados enviados ao backend:", res.data);
       alert(`Agendamento realizado com sucesso!\nHorário: ${formData.time}`);
 
-      // Marcar slot como indisponível
-      setSlots((prevSlots) =>
-        prevSlots.map((slot) =>
-          slot.time === formData.time ? { ...slot, isAvailable: false } : slot
-        )
-      );
+      // Marca localmente o slot como indisponível
+      const slotTime = formData.time;
+      let sectionFound: "manha" | "tarde" | null = null;
 
-      // Resetar
+      if (mapa.manha.some((s) => s.time === slotTime)) {
+        sectionFound = "manha";
+      } else if (mapa.tarde.some((s) => s.time === slotTime)) {
+        sectionFound = "tarde";
+      }
+
+      if (sectionFound) {
+        setMapa((prev) => {
+          const updatedSection = prev[sectionFound!].map((slot) =>
+            slot.time === slotTime
+              ? { ...slot, isAvailable: false }
+              : slot
+          );
+          return {
+            ...prev,
+            [sectionFound!]: updatedSection,
+          };
+        });
+      }
+
       setFormData({ name: "", service: "", date: "", time: "" });
     } catch (err) {
       console.error("Erro ao enviar ao backend:", err);
-      alert("Ocorreu um erro ao agendar. Tente novamente.");
+      alert("Ocorreu um erro ao agendar. Tente novamente mais tarde.");
     }
   };
 
   return (
-    <div
-      style={{
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        width: "100%",
-        height: "100vh",
-        margin: 0,
-        overflowX: "hidden",
-      }}
-    >
+    <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", width: "100%", height: "100vh", margin: 0, overflowX: "hidden" }}>
       <Header />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "2rem",
-          padding: "2rem",
-          background: "#f0f0f0",
-          borderBottom: "1px solid #ddd",
-          width: "100%",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "3rem",
-            marginBottom: "1.5rem",
-            color: "#333",
-            fontWeight: "bold",
-            textTransform: "uppercase",
-          }}
-        >
-          Bem-vindo ao Ginásio
-        </h1>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2rem", padding: "2rem", background: "#f0f0f0", borderBottom: "1px solid #ddd", width: "100%" }}>
+        <h1 style={{ fontSize: "3rem", marginBottom: "1.5rem", color: "#333", fontWeight: "bold", textTransform: "uppercase" }}>Bem-vindo ao Ginásio</h1>
 
-        <h2
-          style={{
-            fontSize: "2rem",
-            marginBottom: "1.5rem",
-            color: "#444",
-            fontWeight: "bold",
-          }}
-        >
-          Serviços Disponíveis
-        </h2>
-
-        <table
-          style={{
-            width: "100%",
-            maxWidth: "800px",
-            borderCollapse: "collapse",
-            marginBottom: "2rem",
-          }}
-        >
+        <h2 style={{ fontSize: "2rem", marginBottom: "1.5rem", color: "#444", fontWeight: "bold" }}>Serviços Disponíveis</h2>
+        <table style={{ width: "100%", maxWidth: "800px", borderCollapse: "collapse", marginBottom: "2rem" }}>
           <thead>
             <tr style={{ backgroundColor: "#ddd", textAlign: "left" }}>
               <th style={{ padding: "10px", fontSize: "1.5rem" }}>Nome</th>
@@ -149,206 +147,83 @@ export default function GinasioPage() {
           </tbody>
         </table>
 
-        {/* Mapa de Vagas */}
-        <h3
-          style={{
-            fontSize: "1.8rem",
-            color: "#333",
-            marginBottom: "1rem",
-          }}
-        >
-          Mapa de Vagas
-        </h3>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "1rem",
-            justifyContent: "center",
-            marginBottom: "2rem",
-          }}
-        >
-          {slots.map((slot) => (
-            <div
-              key={slot.time}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "0.5rem 1rem",
-                backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1",
-                minWidth: "80px",
-                textAlign: "center",
-              }}
-            >
-              <strong>{slot.time}</strong>
-              <br />
-              {slot.isAvailable ? "Disponível" : "Indisponível"}
+        {/* Accordion - Mapa de Vagas */}
+        <h3 style={{ fontSize: "1.8rem", color: "#333", marginBottom: "1rem" }}>Vagas</h3>
+
+        {/* Accordion Section - Manhã */}
+        <div style={{ width: "100%", maxWidth: "600px", marginBottom: "1rem", borderRadius: "8px", overflow: "hidden", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+          <button onClick={() => toggleAccordion("manha")} style={{ width: "100%", backgroundColor: "#0070f3", color: "#fff", textAlign: "left", padding: "1rem", fontSize: "1.2rem", border: "none", cursor: "pointer" }}>
+            Manhã
+          </button>
+          {openAccordion === "manha" && (
+            <div style={{ backgroundColor: "#fff", padding: "1rem" }}>
+              {mapa.manha.map((slot) => (
+                <div key={slot.time} style={{ marginBottom: "0.5rem", border: "1px solid #ccc", borderRadius: "5px", padding: "0.5rem", backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1" }}>
+                  <strong>{slot.time}</strong> - {slot.isAvailable ? "Disponível" : "Indisponível"}
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
 
-        <h2
-          style={{
-            fontSize: "2rem",
-            marginBottom: "1.5rem",
-            color: "#444",
-            fontWeight: "bold",
-          }}
-        >
-          Agende o seu horário
-        </h2>
+        {/* Accordion Section - Tarde */}
+        <div style={{ width: "100%", maxWidth: "600px", marginBottom: "2rem", borderRadius: "8px", overflow: "hidden", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+          <button onClick={() => toggleAccordion("tarde")} style={{ width: "100%", backgroundColor: "#0070f3", color: "#fff", textAlign: "left", padding: "1rem", fontSize: "1.2rem", border: "none", cursor: "pointer" }}>
+            Tarde
+          </button>
+          {openAccordion === "tarde" && (
+            <div style={{ backgroundColor: "#fff", padding: "1rem" }}>
+              {mapa.tarde.map((slot) => (
+                <div key={slot.time} style={{ marginBottom: "0.5rem", border: "1px solid #ccc", borderRadius: "5px", padding: "0.5rem", backgroundColor: slot.isAvailable ? "#d1ffd1" : "#ffd1d1" }}>
+                  <strong>{slot.time}</strong> - {slot.isAvailable ? "Disponível" : "Indisponível"}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Formulário de Agendamento */}
+        <h2 style={{ fontSize: "2rem", marginBottom: "1.5rem", color: "#444", fontWeight: "bold" }}>Agende o seu horário</h2>
         <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "600px" }}>
           <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold" }}>
             Nome:
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Seu nome"
-              style={{
-                width: "100%",
-                padding: "1rem",
-                marginTop: "10px",
-                borderRadius: "8px",
-                border: "2px solid #ccc",
-                fontSize: "1.2rem",
-              }}
-            />
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Seu nome" style={{ width: "100%", padding: "1rem", marginTop: "10px", borderRadius: "8px", border: "2px solid #ccc", fontSize: "1.2rem" }} />
           </label>
 
-          <label
-            style={{
-              display: "block",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              marginTop: "1rem",
-            }}
-          >
+          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
             Serviço:
-            <select
-              name="service"
-              value={formData.service}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "1rem",
-                marginTop: "10px",
-                borderRadius: "8px",
-                border: "2px solid #ccc",
-                fontSize: "1.2rem",
-              }}
-            >
+            <select name="service" value={formData.service} onChange={handleChange} required style={{ width: "100%", padding: "1rem", marginTop: "10px", borderRadius: "8px", border: "2px solid #ccc", fontSize: "1.2rem" }}>
               <option value="">Selecione um serviço</option>
               {services.map((service) => (
-                <option key={service.id} value={service.name}>
-                  {service.name}
-                </option>
+                <option key={service.id} value={service.name}>{service.name}</option>
               ))}
             </select>
           </label>
 
-          <label
-            style={{
-              display: "block",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              marginTop: "1rem",
-            }}
-          >
+          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
             Data:
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "1rem",
-                marginTop: "10px",
-                borderRadius: "8px",
-                border: "2px solid #ccc",
-                fontSize: "1.2rem",
-              }}
-            />
+            <input type="date" name="date" value={formData.date} onChange={handleChange} required style={{ width: "100%", padding: "1rem", marginTop: "10px", borderRadius: "8px", border: "2px solid #ccc", fontSize: "1.2rem" }} />
           </label>
 
-          <label
-            style={{
-              display: "block",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              marginTop: "1rem",
-            }}
-          >
+          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
             Hora:
-            <select
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              required
-              style={{
-                width: "100%",
-                padding: "1rem",
-                marginTop: "10px",
-                borderRadius: "8px",
-                border: "2px solid #ccc",
-                fontSize: "1.2rem",
-              }}
-            >
+            <select name="time" value={formData.time} onChange={handleChange} required style={{ width: "100%", padding: "1rem", marginTop: "10px", borderRadius: "8px", border: "2px solid #ccc", fontSize: "1.2rem" }}>
               <option value="">Selecione uma hora</option>
-              {slots.map((slot) =>
-                slot.isAvailable ? (
-                  <option key={slot.time} value={slot.time}>
-                    {slot.time}
-                  </option>
-                ) : null
-              )}
+              {[...mapa.manha, ...mapa.tarde].filter((slot) => slot.isAvailable).map((slot) => (
+                <option key={slot.time} value={slot.time}>{slot.time}</option>
+              ))}
             </select>
           </label>
 
-          <button
-            type="submit"
-            style={{
-              padding: "1rem 2rem",
-              fontSize: "1.5rem",
-              backgroundColor: "#0070f3",
-              color: "#fff",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              transition: "background 0.3s ease, transform 0.3s ease",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              marginTop: "2rem",
-            }}
-          >
+          <button type="submit" style={{ padding: "1rem 2rem", fontSize: "1.5rem", backgroundColor: "#0070f3", color: "#fff", border: "none", borderRadius: "10px", cursor: "pointer", transition: "background 0.3s ease, transform 0.3s ease", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", marginTop: "2rem" }}>
             Agendar
           </button>
         </form>
 
-        <button
-          type="button"
-          onClick={() => router.push("/")}
-          style={{
-            padding: "1rem 2rem",
-            fontSize: "1.5rem",
-            backgroundColor: "#666",
-            color: "#fff",
-            border: "none",
-            borderRadius: "10px",
-            cursor: "pointer",
-            transition: "background 0.3s ease, transform 0.3s ease",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            marginTop: "2rem",
-          }}
-        >
-          Voltar
+        <button type="button" onClick={() => router.push("/")} style={{ padding: "1rem 2rem", fontSize: "1.5rem", backgroundColor: "#666", color: "#fff", border: "none", borderRadius: "10px", cursor: "pointer", transition: "background 0.3s ease, transform 0.3s ease", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", marginTop: "1rem" }}>
+          Voltar ao Menu Principal
         </button>
       </div>
-
       <Footer />
     </div>
   );
