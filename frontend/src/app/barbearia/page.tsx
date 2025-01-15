@@ -1,9 +1,12 @@
-/* eslint-disable @next/next/no-img-element */
+
 "use client";
+
 import React from "react";
 import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+// IMPORT do cliente de API (Axios)
+import API from "../services/api"
 
 const services = [
   { id: 1, name: "Corte de Cabelo", price: "15€", description: "Corte profissional com acabamento perfeito." },
@@ -11,7 +14,7 @@ const services = [
   { id: 3, name: "Corte + Barba", price: "20€", description: "Pacote completo de corte de cabelo e barba." },
 ];
 
-// Cria os horários de meia em meia hora (das 9h até 17h30, por exemplo)
+// Cria os horários de meia em meia hora (das 9h até 17h30)
 const halfHourSlots = [
   "09:00", "09:30",
   "10:00", "10:30",
@@ -32,10 +35,7 @@ const initialSlots = halfHourSlots.map((time) => ({
 export default function BarbeariaPage() {
   const router = useRouter();
 
-  // Estado que controla as vagas (mapa de vagas)
   const [slots, setSlots] = React.useState(initialSlots);
-
-  // Estado do formulário
   const [formData, setFormData] = React.useState({
     name: "",
     service: "",
@@ -43,7 +43,7 @@ export default function BarbeariaPage() {
     time: "",
   });
 
-  // Lida com mudanças nos campos de input/select
+  // Lida com mudanças nos campos
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -52,27 +52,36 @@ export default function BarbeariaPage() {
   };
 
   // Lida com envio do formulário
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Se não houver serviço, data ou hora selecionados, parar aqui
     if (!formData.name || !formData.service || !formData.date || !formData.time) {
       alert("Por favor, preencha todos os campos antes de agendar.");
       return;
     }
 
-    // Atualiza a disponibilidade do horário selecionado
-    setSlots((prevSlots) =>
-      prevSlots.map((slot) =>
-        slot.time === formData.time ? { ...slot, isAvailable: false } : slot
-      )
-    );
+    // Exemplo de chamada à API do backend
+    try {
+      // Supondo que sua rota no backend seja POST /api/bookings
+      // Ajuste conforme necessário (p. ex. "/api/barbearia/bookings")
+      const res = await API.post("/bookings", formData);
 
-    console.log("Dados enviados:", formData);
-    alert(`Agendamento realizado com sucesso!\nHorário: ${formData.time}`);
+      console.log("Dados enviados ao backend:", res.data);
+      alert(`Agendamento realizado com sucesso!\nHorário: ${formData.time}`);
 
-    // (Opcional) Resetar o formulário
-    setFormData({ name: "", service: "", date: "", time: "" });
+      // Marca localmente o slot como indisponível
+      setSlots((prevSlots) =>
+        prevSlots.map((slot) =>
+          slot.time === formData.time ? { ...slot, isAvailable: false } : slot
+        )
+      );
+
+      // (Opcional) Resetar formulário
+      setFormData({ name: "", service: "", date: "", time: "" });
+    } catch (err) {
+      console.error("Erro ao enviar ao backend:", err);
+      alert("Ocorreu um erro ao agendar. Tente novamente mais tarde.");
+    }
   };
 
   return (
@@ -154,7 +163,7 @@ export default function BarbeariaPage() {
           </tbody>
         </table>
 
-        {/* Mapa de Vagas (Disponível / Indisponível) */}
+        {/* Mapa de Vagas */}
         <h3
           style={{
             fontSize: "1.8rem",

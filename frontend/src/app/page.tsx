@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Header from "./componentsPaginaInicial/Header";
 import Footer from "./componentsPaginaInicial/Footer";
+// IMPORT do cliente de API (caso queira algo no "Home")
 
 export default function Home() {
   useEffect(() => {
@@ -13,11 +14,9 @@ export default function Home() {
     };
   }, []);
 
-  // Definindo estados para controlar os cliques nas caixas
   const [clickedSobreNos, setClickedSobreNos] = useState(false);
   const [clickedContateNos, setClickedContateNos] = useState(false);
 
-  // Funções para controlar o clique
   const handleClickSobreNos = () => {
     setClickedSobreNos(!clickedSobreNos);
   };
@@ -28,7 +27,7 @@ export default function Home() {
 
   return (
     <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", margin: 0, padding: 0, backgroundColor: "#ffffff" }}>
-      <Header /> {/* Inserindo o Header */}
+      <Header />
 
       <div
         style={{
@@ -38,9 +37,9 @@ export default function Home() {
           justifyContent: "center",
           height: "70vh",
           gap: "2rem",
-          background: "#f0f0f0", // Cor de fundo suave
+          background: "#f0f0f0",
           padding: "3rem",
-          borderBottom: "1px solid #ddd", // Divisória suave entre as seções
+          borderBottom: "1px solid #ddd",
           borderRadius: "15px",
           boxShadow: "0 6px 20px rgba(0, 0, 0, 0.1)",
         }}
@@ -49,7 +48,7 @@ export default function Home() {
           style={{
             fontSize: "3.5rem",
             marginBottom: "1.5rem",
-            color: "#333", // Cor de texto mais forte
+            color: "#333",
             fontWeight: "bold",
             textTransform: "uppercase",
             letterSpacing: "2px",
@@ -68,7 +67,7 @@ export default function Home() {
               style={{
                 padding: "1.2rem 2.5rem",
                 fontSize: "1.6rem",
-                background: "#0070f3", // Cor azul
+                background: "#0070f3",
                 color: "#fff",
                 border: "none",
                 borderRadius: "25px",
@@ -77,11 +76,11 @@ export default function Home() {
                 boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.background = "#005bb5"; // Cor mais escura no hover
+                e.currentTarget.style.background = "#005bb5";
                 e.currentTarget.style.transform = "scale(1.05)";
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.background = "#0070f3"; // Cor inicial
+                e.currentTarget.style.background = "#0070f3";
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
@@ -94,7 +93,7 @@ export default function Home() {
               style={{
                 padding: "1.2rem 2.5rem",
                 fontSize: "1.6rem",
-                background: "#0070f3", // Cor azul
+                background: "#0070f3",
                 color: "#fff",
                 border: "none",
                 borderRadius: "25px",
@@ -103,11 +102,11 @@ export default function Home() {
                 boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.background = "#005bb5"; // Cor mais escura no hover
+                e.currentTarget.style.background = "#005bb5";
                 e.currentTarget.style.transform = "scale(1.05)";
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.background = "#0070f3"; // Cor inicial
+                e.currentTarget.style.background = "#0070f3";
                 e.currentTarget.style.transform = "scale(1)";
               }}
             >
@@ -126,24 +125,24 @@ export default function Home() {
           justifyContent: "center",
           height: "40vh",
           gap: "2rem",
-          background: "#ffffff", // Fundo branco
+          background: "#ffffff",
           padding: "2rem",
           borderBottom: "1px solid #ddd",
-          maxWidth: "800px", // Diminuindo a largura máxima
-          width: "100%", // Garantir que a largura se ajuste no mobile
-          margin: "0 auto", // Centralizando horizontalmente
-          borderRadius: "15px", // Bordas arredondadas
-          boxShadow: clickedSobreNos ? "0 8px 24px rgba(0, 0, 0, 0.2)" : "0 4px 12px rgba(0, 0, 0, 0.1)", // Sombra maior ao clicar
-          transform: clickedSobreNos ? "scale(1.05)" : "scale(1)", // Aumenta a caixa quando clicada
-          transition: "all 0.3s ease", // Transição suave
-          textAlign: "center", // Alinhamento centralizado do texto
+          maxWidth: "800px",
+          width: "100%",
+          margin: "0 auto",
+          borderRadius: "15px",
+          boxShadow: clickedSobreNos ? "0 8px 24px rgba(0, 0, 0, 0.2)" : "0 4px 12px rgba(0, 0, 0, 0.1)",
+          transform: clickedSobreNos ? "scale(1.05)" : "scale(1)",
+          transition: "all 0.3s ease",
+          textAlign: "center",
         }}
       >
         <h2
           style={{
             fontSize: "2rem",
             marginBottom: "1rem",
-            color: "#333", // Cor de texto mais forte
+            color: "#333",
             fontWeight: "bold",
             textTransform: "uppercase",
           }}
@@ -164,24 +163,24 @@ export default function Home() {
           justifyContent: "center",
           height: "40vh",
           gap: "2rem",
-          background: "#ffffff", // Fundo branco
+          background: "#ffffff",
           padding: "2rem",
           borderBottom: "1px solid #ddd",
-          maxWidth: "800px", // Diminuindo a largura máxima
-          width: "100%", // Garantir que a largura se ajuste no mobile
-          margin: "0 auto", // Centralizando horizontalmente
-          borderRadius: "15px", // Bordas arredondadas
-          boxShadow: clickedContateNos ? "0 8px 24px rgba(0, 0, 0, 0.2)" : "0 4px 12px rgba(0, 0, 0, 0.1)", // Sombra maior ao clicar
-          transform: clickedContateNos ? "scale(1.05)" : "scale(1)", // Aumenta a caixa quando clicada
-          transition: "all 0.3s ease", // Transição suave
-          textAlign: "center", // Alinhamento centralizado do texto
+          maxWidth: "800px",
+          width: "100%",
+          margin: "0 auto",
+          borderRadius: "15px",
+          boxShadow: clickedContateNos ? "0 8px 24px rgba(0, 0, 0, 0.2)" : "0 4px 12px rgba(0, 0, 0, 0.1)",
+          transform: clickedContateNos ? "scale(1.05)" : "scale(1)",
+          transition: "all 0.3s ease",
+          textAlign: "center",
         }}
       >
         <h2
           style={{
             fontSize: "2rem",
             marginBottom: "1rem",
-            color: "#333", // Cor de texto mais forte
+            color: "#333",
             fontWeight: "bold",
             textTransform: "uppercase",
           }}
@@ -196,7 +195,7 @@ export default function Home() {
         </p>
       </div>
 
-      <Footer /> {/* Inserindo o Footer */}
+      <Footer />
     </div>
   );
 }

@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3001",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.5",
+    "axios": "^1.7.9",
     "leaflet": "^1.9.4",
     "next": "15.1.4",
     "react": "^19.0.0",

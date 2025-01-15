@@ -1,8 +1,11 @@
 "use client";
+
 import React from "react";
 import { useRouter } from "next/navigation"; // Importação do useRouter
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+// IMPORT do cliente de API (caso queira validar login no backend)
+import API from "../services/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,22 +17,42 @@ export default function LoginPage() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validação simples: verifique se os campos não estão vazios
     if (!formData.username || !formData.password) {
       setError("Por favor, preencha todos os campos.");
       return;
     }
 
-    // Se a validação for bem-sucedida, pode fazer o login
-    console.log("Usuário:", formData.username);
-    console.log("Senha:", formData.password);
+    try {
+      // Chamada real ao backend (mude a rota conforme a sua necessidade)
+      // Supondo que seu backend tenha uma rota POST /auth/login
+      const res = await API.post("/auth/login", {
+        username: formData.username,
+        password: formData.password,
+      });
 
-    // Simula redirecionamento para a página principal após login
-    alert("Login bem-sucedido!");
-    router.push("/"); // Redireciona para a página inicial (ou para a página desejada)
+      console.log("Resposta do login:", res.data);
+
+      // Se o login for bem-sucedido, você recebe { user, token }, por exemplo
+      // Armazene o token no localStorage (ou cookies, se preferir)
+      localStorage.setItem("token", res.data.token);
+
+      alert("Login bem-sucedido!");
+      router.push("/");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error("Erro no login:", err);
+      // Se o servidor retornar status 400 ou 401, você pode capturar a mensagem
+      // Caso contrário, use uma mensagem genérica
+      
+      if (err.response?.data?.error) {
+        setError(err.response.data.error);
+      } else {
+        setError("Usuário ou senha inválidos!");
+      }
+    }
   };
 
   return (
@@ -59,7 +82,6 @@ export default function LoginPage() {
           Página de Login
         </h1>
 
-        {/* Exibe mensagem de erro caso o campo não seja preenchido */}
         {error && (
           <div
             style={{
@@ -159,7 +181,6 @@ export default function LoginPage() {
         >
           Voltar
         </button>
-
       </div>
       <Footer />
     </div>
