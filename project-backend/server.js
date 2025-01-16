@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-C
+
 
 // Conectar ao MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -31,10 +31,10 @@ mongoose.connect(process.env.MONGO_URI)
 
     
 //Rotas
-app.use('/api/users', userRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/entities', entitiesRoutes);
-app.use('/api/services', serviceRoutes);
+app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
+app.use('/entities', entitiesRoutes);
+app.use('/services', serviceRoutes);
 app.use('/bookings', bookingRoutes);
 
 //Error Handler
