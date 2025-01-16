@@ -27,4 +27,31 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { login };
+// Função de registo de utilizadores
+const register = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        if (!username || !email || !password) {
+            return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+        }
+
+        // Verificar se o utilizador já existe
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(409).json({ message: 'Email já registado.' });
+        }
+
+        // Encriptação da senha
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Criar novo utilizador
+        const newUser = await User.create({ username, email, password: hashedPassword });
+
+        res.status(201).json({ message: 'Utilizador registado com sucesso!', user: newUser });
+    } catch (error) {
+        res.status(500).json({ message: 'Erro ao registar o utilizador.', error });
+    }
+};
+
+module.exports = { login, register };
