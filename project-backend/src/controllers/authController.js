@@ -42,16 +42,18 @@ const register = async (req, res) => {
             return res.status(409).json({ message: 'Email já registado.' });
         }
 
-        // Encriptação da senha
+        // Encriptar a senha
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Criar novo utilizador
+        // Criar o utilizador
         const newUser = await User.create({ username, email, password: hashedPassword });
 
         res.status(201).json({ message: 'Utilizador registado com sucesso!', user: newUser });
     } catch (error) {
-        res.status(500).json({ message: 'Erro ao registar o utilizador.', error });
+        console.error("Erro ao registar utilizador:", error);
+        res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 };
 
-module.exports = { login, register };
+module.exports = { login};
+module.exports = { register};
