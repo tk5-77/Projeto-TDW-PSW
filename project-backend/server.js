@@ -29,6 +29,7 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('DB connected'))
     .catch((error) => console.error('Erro ao conectar à DB:', error));
 
+    
 //Rotas
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
