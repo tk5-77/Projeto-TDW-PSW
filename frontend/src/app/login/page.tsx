@@ -1,10 +1,11 @@
 "use client";
 
+
+import axios from "axios";
 import React from "react";
-import { useRouter } from "next/navigation"; // Importação do useRouter
+import { useRouter } from "next/navigation";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-// IMPORT do cliente de API (caso queira validar login no backend)
 import API from "../services/api";
 
 export default function LoginPage() {
@@ -14,20 +15,20 @@ export default function LoginPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value.trimStart() });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validar se os campos estão preenchidos
     if (!formData.username || !formData.password) {
       setError("Por favor, preencha todos os campos.");
       return;
     }
 
     try {
-      // Chamada real ao backend (mude a rota conforme a sua necessidade)
-      // Supondo que seu backend tenha uma rota POST /auth/login
+      // Chamada ao backend
       const res = await API.post("/auth/login", {
         username: formData.username,
         password: formData.password,
@@ -35,25 +36,21 @@ export default function LoginPage() {
 
       console.log("Resposta do login:", res.data);
 
-      // Se o login for bem-sucedido, você recebe { user, token }, por exemplo
-      // Armazene o token no localStorage (ou cookies, se preferir)
+      // Armazena o token no localStorage
       localStorage.setItem("token", res.data.token);
 
       alert("Login bem-sucedido!");
       router.push("/");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error("Erro no login:", err);
-      // Se o servidor retornar status 400 ou 401, você pode capturar a mensagem
-      // Caso contrário, use uma mensagem genérica
-      
-      if (err.response?.data?.error) {
-        setError(err.response.data.error);
+  } catch (err) {
+      if (axios.isAxiosError(err)) {
+          // Tratamento para erros do Axios
+          setError(err.response?.data?.message || "Erro ao realizar login. Tente novamente.");
       } else {
-        setError("Usuário ou senha inválidos!");
+          // Tratamento para outros tipos de erro
+          setError("Ocorreu um erro inesperado. Tente novamente mais tarde.");
       }
-    }
-  };
+  }
+};
 
   return (
     <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
@@ -70,27 +67,12 @@ export default function LoginPage() {
           minHeight: "100vh",
         }}
       >
-        <h1
-          style={{
-            fontSize: "3rem",
-            marginBottom: "1.5rem",
-            color: "#333",
-            fontWeight: "bold",
-            textTransform: "uppercase",
-          }}
-        >
+        <h1 style={{ fontSize: "3rem", marginBottom: "1.5rem", color: "#333", fontWeight: "bold", textTransform: "uppercase" }}>
           Página de Login
         </h1>
 
         {error && (
-          <div
-            style={{
-              color: "red",
-              fontSize: "1.2rem",
-              fontWeight: "bold",
-              marginBottom: "1rem",
-            }}
-          >
+          <div style={{ color: "red", fontSize: "1.2rem", fontWeight: "bold", marginBottom: "1rem" }}>
             {error}
           </div>
         )}
