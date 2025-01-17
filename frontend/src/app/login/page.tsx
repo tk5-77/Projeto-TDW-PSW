@@ -54,6 +54,20 @@ export default function LoginPage() {
 
   return (
     <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
+            <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: "url('/imagem_login_inicio_registo.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(8px)", // Desfoque aplicado à imagem
+          zIndex: -1, // Garante que a imagem fique atrás de todos os elementos
+        }}
+      ></div>
       <Header />
       <div
         style={{
@@ -63,8 +77,8 @@ export default function LoginPage() {
           justifyContent: "center",
           gap: "2rem",
           padding: "2rem",
-          background: "#f0f0f0",
           minHeight: "100vh",
+          background: "rgba(255, 255, 255, 0.4)"
         }}
       >
         <h1 style={{ fontSize: "3rem", marginBottom: "1.5rem", color: "#333", fontWeight: "bold", textTransform: "uppercase" }}>

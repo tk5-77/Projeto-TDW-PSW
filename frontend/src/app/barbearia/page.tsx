@@ -96,7 +96,7 @@ export default function BarbeariaPage() {
       const res = await API.post("/bookings", formData);
 
       console.log("Dados enviados ao backend:", res.data);
-      alert(`Agendamento realizado com sucesso!\nHorário: ${formData.time}`);
+      alert('Agendamento realizado com sucesso!\nHorário: ${formData.time}');
 
       // Marca localmente o slot como indisponível
       // Precisamos achar a secção (manha / tarde) que contém esse "time"
@@ -142,6 +142,20 @@ export default function BarbeariaPage() {
         overflowX: "hidden",
       }}
     >
+            <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: "url('/foto_fundo_barbearia.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(8px)", // Desfoque aplicado à imagem
+          zIndex: -1, // Garante que a imagem fique atrás de todos os elementos
+        }}
+      ></div>
       <Header />
       <div
         style={{
@@ -151,7 +165,7 @@ export default function BarbeariaPage() {
           justifyContent: "center",
           gap: "2rem",
           padding: "2rem",
-          background: "#f0f0f0",
+          background: "rgba(255, 255, 255, 0.4)",
           borderBottom: "1px solid #ddd",
           width: "100%",
         }}
@@ -185,6 +199,7 @@ export default function BarbeariaPage() {
             maxWidth: "800px",
             borderCollapse: "collapse",
             marginBottom: "2rem",
+            backgroundColor: "#fff",
           }}
         >
           <thead>

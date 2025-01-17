@@ -13,12 +13,13 @@ export default function Header() {
   return (
     <header
       style={{
-        backgroundColor: "#0070f3",
+        backgroundColor: "rgba(0, 38, 255, 0.5)",
         color: "#fff",
         padding: "2rem", // Aumentado o padding para mais espaçamento
         width: "100%",
         maxWidth: "100vw", // Garante que não ultrapasse a largura da tela
         display: "flex",
+        borderRadius: "0 0 15px 15px", // Borda arredondada apenas na parte inferior
         justifyContent: "space-between",
         alignItems: "center",
         boxSizing: "border-box", // Inclui padding na largura total

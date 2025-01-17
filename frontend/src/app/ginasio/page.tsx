@@ -123,12 +123,26 @@ export default function GinasioPage() {
 
   return (
     <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", width: "100%", height: "100vh", margin: 0, overflowX: "hidden" }}>
+         <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: "url('/ginasio.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(8px)", // Desfoque aplicado à imagem
+          zIndex: -1, // Garante que a imagem fique atrás de todos os elementos
+        }}
+      ></div>
       <Header />
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2rem", padding: "2rem", background: "#f0f0f0", borderBottom: "1px solid #ddd", width: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2rem", padding: "2rem", background:"rgba(255, 255, 255, 0.4)", borderBottom: "1px solid #ddd", width: "100%" }}>
         <h1 style={{ fontSize: "3rem", marginBottom: "1.5rem", color: "#333", fontWeight: "bold", textTransform: "uppercase" }}>Bem-vindo ao Ginásio</h1>
 
         <h2 style={{ fontSize: "2rem", marginBottom: "1.5rem", color: "#444", fontWeight: "bold" }}>Serviços Disponíveis</h2>
-        <table style={{ width: "100%", maxWidth: "800px", borderCollapse: "collapse", marginBottom: "2rem" }}>
+        <table style={{ width: "100%", maxWidth: "800px", borderCollapse: "collapse", marginBottom: "2rem", background: "#fff"}}>
           <thead>
             <tr style={{ backgroundColor: "#ddd", textAlign: "left" }}>
               <th style={{ padding: "10px", fontSize: "1.5rem" }}>Nome</th>
