@@ -143,6 +143,7 @@ export default function LoginPage() {
     >
       Entrar
     </button>
+<<<<<<< HEAD
 
     <button
       type="button"
