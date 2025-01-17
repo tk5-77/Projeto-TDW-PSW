@@ -143,7 +143,6 @@ export default function LoginPage() {
     >
       Entrar
     </button>
-<<<<<<< HEAD
 
     <button
       type="button"
@@ -177,39 +176,4 @@ export default function LoginPage() {
       <Footer />
     </div>
   );
-=======
-
-    <button
-      type="button"
-      onClick={() => router.push("/register")}
-      style={{
-        padding: "1rem 2rem",
-        fontSize: "1.5rem",
-        backgroundColor: "#0070f3",
-        color: "#fff",
-        border: "none",
-        borderRadius: "10px",
-        cursor: "pointer",
-        transition: "background 0.3s ease, transform 0.3s ease",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-      }}
-      onMouseOver={(e) => {
-        e.currentTarget.style.background = "#005bb5";
-        e.currentTarget.style.transform = "scale(1.05)";
-      }}
-      onMouseOut={(e) => {
-        e.currentTarget.style.background = "#0070f3";
-        e.currentTarget.style.transform = "scale(1)";
-      }}
-    >
-      Criar Conta
-    </button>
-  </div>
-</form>
-</div>
-<Header />
-</div>
-);
->>>>>>> fb2903a7e4419414ee6a48570f37cbf3f0eea687
 }
-
