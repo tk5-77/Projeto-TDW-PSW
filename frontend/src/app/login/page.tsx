@@ -77,92 +77,101 @@ export default function LoginPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "400px" }}>
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold" }}>
-            Usuário:
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-              placeholder="Digite seu usuário"
-              style={{
-                width: "100%",
-                padding: "1rem",
-                marginTop: "10px",
-                borderRadius: "8px",
-                border: "2px solid #ccc",
-                fontSize: "1.2rem",
-              }}
-            />
-          </label>
+<form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: "400px" }}>
+  <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold" }}>
+    Usuário:
+    <input
+      type="text"
+      name="username"
+      value={formData.username}
+      onChange={handleChange}
+      required
+      placeholder="Digite seu usuário"
+      style={{
+        width: "100%",
+        padding: "1rem",
+        marginTop: "10px",
+        borderRadius: "8px",
+        border: "2px solid #ccc",
+        fontSize: "1.2rem",
+      }}
+    />
+  </label>
 
-          <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
-            Senha:
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Digite sua senha"
-              style={{
-                width: "100%",
-                padding: "1rem",
-                marginTop: "10px",
-                borderRadius: "8px",
-                border: "2px solid #ccc",
-                fontSize: "1.2rem",
-              }}
-            />
-          </label>
+  <label style={{ display: "block", fontSize: "1.5rem", fontWeight: "bold", marginTop: "1rem" }}>
+    Senha:
+    <input
+      type="password"
+      name="password"
+      value={formData.password}
+      onChange={handleChange}
+      required
+      placeholder="Digite sua senha"
+      style={{
+        width: "100%",
+        padding: "1rem",
+        marginTop: "10px",
+        borderRadius: "8px",
+        border: "2px solid #ccc",
+        fontSize: "1.2rem",
+      }}
+    />
+  </label>
 
-          <button
-            type="submit"
-            style={{
-              padding: "1rem 2rem",
-              fontSize: "1.5rem",
-              backgroundColor: "#0070f3",
-              color: "#fff",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              transition: "background 0.3s ease, transform 0.3s ease",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              marginTop: "2rem",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = "#005bb5";
-              e.currentTarget.style.transform = "scale(1.05)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = "#0070f3";
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            Entrar
-          </button>
-        </form>
+  <div style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+    <button
+      type="submit"
+      style={{
+        padding: "1rem 2rem",
+        fontSize: "1.5rem",
+        backgroundColor: "#0070f3",
+        color: "#fff",
+        border: "none",
+        borderRadius: "10px",
+        cursor: "pointer",
+        transition: "background 0.3s ease, transform 0.3s ease",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.background = "#005bb5";
+        e.currentTarget.style.transform = "scale(1.05)";
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.background = "#0070f3";
+        e.currentTarget.style.transform = "scale(1)";
+      }}
+    >
+      Entrar
+    </button>
 
-        <button
-          type="button"
-          onClick={() => router.push("/")}
-          style={{
-            padding: "1rem 2rem",
-            fontSize: "1.5rem",
-            backgroundColor: "#666",
-            color: "#fff",
-            border: "none",
-            borderRadius: "10px",
-            cursor: "pointer",
-            transition: "background 0.3s ease, transform 0.3s ease",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            marginTop: "2rem",
-          }}
-        >
-          Voltar
-        </button>
+    <button
+      type="button"
+      onClick={() => router.push("/register")}
+      style={{
+        padding: "1rem 2rem",
+        fontSize: "1.5rem",
+        backgroundColor: "#0070f3",
+        color: "#fff",
+        border: "none",
+        borderRadius: "10px",
+        cursor: "pointer",
+        transition: "background 0.3s ease, transform 0.3s ease",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
+      onMouseOver={(e) => {
+        e.currentTarget.style.background = "#005bb5";
+        e.currentTarget.style.transform = "scale(1.05)";
+      }}
+      onMouseOut={(e) => {
+        e.currentTarget.style.background = "#0070f3";
+        e.currentTarget.style.transform = "scale(1)";
+      }}
+    >
+      Criar Conta
+    </button>
+  </div>
+</form>
+
       </div>
       <Footer />
     </div>
