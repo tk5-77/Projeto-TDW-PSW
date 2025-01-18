@@ -5,6 +5,8 @@ import Link from "next/link"; // Importe o componente Link
 import Header from "./componentsPaginaInicial/Header"; // Importando o Header
 import Footer from "./componentsPaginaInicial/Footer";
 
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

@@ -54,6 +54,20 @@ export default function LoginPage() {
 
   return (
     <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
+            <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: "url('/imagem_login_inicio_registo.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(8px)", // Desfoque aplicado à imagem
+          zIndex: -1, // Garante que a imagem fique atrás de todos os elementos
+        }}
+      ></div>
       <Header />
       <div
         style={{
@@ -63,8 +77,8 @@ export default function LoginPage() {
           justifyContent: "center",
           gap: "2rem",
           padding: "2rem",
-          background: "#f0f0f0",
           minHeight: "100vh",
+          background: "rgba(255, 255, 255, 0.4)"
         }}
       >
         <h1 style={{ fontSize: "3rem", marginBottom: "1.5rem", color: "#333", fontWeight: "bold", textTransform: "uppercase" }}>
@@ -144,35 +158,26 @@ export default function LoginPage() {
       Entrar
     </button>
 
-    <button
-      type="button"
-      onClick={() => router.push("/register")}
-      style={{
-        padding: "1rem 2rem",
-        fontSize: "1.5rem",
-        backgroundColor: "#0070f3",
-        color: "#fff",
-        border: "none",
-        borderRadius: "10px",
-        cursor: "pointer",
-        transition: "background 0.3s ease, transform 0.3s ease",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-      }}
-      onMouseOver={(e) => {
-        e.currentTarget.style.background = "#005bb5";
-        e.currentTarget.style.transform = "scale(1.05)";
-      }}
-      onMouseOut={(e) => {
-        e.currentTarget.style.background = "#0070f3";
-        e.currentTarget.style.transform = "scale(1)";
-      }}
-    >
-      Criar Conta
-    </button>
-  </div>
-</form>
-</div>
-<Header />
-</div>
-);
+        <button
+          type="button"
+          onClick={() => router.push("/")}
+          style={{
+            padding: "1rem 2rem",
+            fontSize: "1.5rem",
+            backgroundColor: "#666",
+            color: "#fff",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            transition: "background 0.3s ease, transform 0.3s ease",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            marginTop: "2rem",
+          }}
+        >
+          Voltar
+        </button>
+      </div>
+      <Footer />
+    </div>
+  );
 }
