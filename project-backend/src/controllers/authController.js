@@ -1,59 +1,74 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user'); // Certifique-se de que este modelo existe
+const User = require('../models/user');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// Login de utilizador
+// Registro tradicional
+const register = async (req, res) => {
+    try {
+        const { username, email, password, role, entity } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        const user = new User({
+            username,
+            email,
+            password: hashedPassword,
+            role: role || 'client',
+            entity: entity || null
+        });
+
+        await user.save();
+        res.status(201).send(user);
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({ error: 'Registro falhou' });
+    }
+};
+
+// Login tradicional
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Verificar se o utilizador existe
         const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: 'Utilizador não encontrado.' });
+        
+        if (!user || !await bcrypt.compare(password, user.password)) {
+            throw new Error();
         }
 
-        // Verificar a senha
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Credenciais inválidas.' });
-        }
-
-        // Gerar token JWT
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ message: 'Login bem-sucedido.', token });
+        const token = jwt.sign({ id: user._id,role:user}, process.env.JWT_SECRET);
+        res.send({ user, token });
     } catch (error) {
-        res.status(500).json({ message: 'Erro ao fazer login.', error });
+        res.status(401).send({ error: 'Login falhou' });
     }
 };
 
-// Função de registo de utilizadores
-const register = async (req, res) => {
+// Login com Google
+const googleLogin = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { token } = req.body;
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
 
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+        const payload = ticket.getPayload();
+        let user = await User.findOne({ email: payload.email });
+
+        if (!user) {
+            user = new User({
+                username: payload.name,
+                email: payload.email,
+                role: 'client'
+            });
+            await user.save();
         }
 
-        // Verificar se o utilizador já existe
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(409).json({ message: 'Email já registado.' });
-        }
-
-        // Encriptar a senha
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Criar o utilizador
-        const newUser = await User.create({ username, email, password: hashedPassword });
-
-        res.status(201).json({ message: 'Utilizador registado com sucesso!', user: newUser });
+        const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        res.send({ token: jwtToken });
     } catch (error) {
-        console.error("Erro ao registar utilizador:", error);
-        res.status(500).json({ message: 'Erro interno no servidor.' });
+        res.status(400).send({ error: 'Login Google falhou' });
     }
 };
 
-module.exports = { login};
-module.exports = { register};
+module.exports = { register, login, googleLogin };

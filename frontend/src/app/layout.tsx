@@ -4,7 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link"; // Importe o componente Link
 import Header from "./componentsPaginaInicial/Header"; // Importando o Header
 import Footer from "./componentsPaginaInicial/Footer";
-
+import { AuthProvider } from "./AuthContext";
+import "./Global.css";
 
 
 const geistSans = Geist({
@@ -28,6 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+  <AuthProvider>
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
        
@@ -36,5 +38,6 @@ export default function RootLayout({
         {children}
       </body>
     </html>
+  </AuthProvider>
   );
 }

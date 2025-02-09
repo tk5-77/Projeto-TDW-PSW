@@ -3,6 +3,6 @@ const router = express.Router();
 const { auth, checkRole } = require('../middlewares/auth');
 const bookingController = require('../controllers/bookingController');
 
-router.post('/', auth, checkRole('Client'), bookingController.create);
+router.post('/', auth, checkRole('Client'), bookingController.createBooking);
 
 module.exports = router;

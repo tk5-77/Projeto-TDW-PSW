@@ -10,12 +10,11 @@ const auth = async (req, res, next) => {
 
         const token = authHeader.replace('Bearer ', '');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findOne({ _id: decoded.id }); // Use 'id' como no authController
 
+        const user = await User.findOne({ _id: decoded.id }); // Use 'id' como no authController
         if (!user) {
             return res.status(404).json({ error: 'Utilizador não encontrado.' });
         }
-
         req.user = user;
         req.token = token;
         next();
@@ -23,14 +22,20 @@ const auth = async (req, res, next) => {
         res.status(401).json({ error: 'Por favor, autentique-se.' });
     }
 };
+ const checkRole = (allowedRoles) => {
+    return async (req, res, next) => {
+        const userInfo = req.user;
 
-const checkRole = (...roles) => {
-    return (req, res, next) => {
-        if (!roles.includes(req.user.userType)) {
-            return res.status(403).json({ error: 'Acesso negado.' });
+        if(!allowedRoles.includes(userInfo.role)){
+            return res.status(401).json({
+                "message": "You are not allowed to access this endpoint!",
+                "code": 0
+            });
         }
+
         next();
     };
 };
+
 
 module.exports = { auth, checkRole };
