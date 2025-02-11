@@ -58,7 +58,7 @@ export default function ClientDashboard() {
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center">
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-                Cinfães Fit & Barber
+                Bookify
               </span>
             </div>
             <div className="hidden md:block">
@@ -70,11 +70,18 @@ export default function ClientDashboard() {
                   Home
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
                 </a>
-                <a 
-                  href="#contact" 
+                <a  
+                  href="/ClienteMeusServicos" 
                   className="relative group text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
                 >
-                  Logout
+                  Meus Serviços
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                </a>
+                <a  
+                  href="/HistoricoCliente" 
+                  className="relative group text-gray-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+                >
+                  Historico
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
                 </a>
               </div>
@@ -92,7 +99,7 @@ export default function ClientDashboard() {
               <span className="block text-blue-600 mt-2">Ideal</span>
             </h1>
             <p className="mt-4 max-w-md mx-auto text-lg text-gray-500 sm:text-xl md:mt-5 md:max-w-3xl">
-              Descubra os melhores serviços perto de você
+              Descubra os melhores serviços perto de si
             </p>
             <div className="mt-8 max-w-md mx-auto">
               <div className="relative">
@@ -238,13 +245,13 @@ export default function ClientDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-gray-900 font-semibold mb-4">Cinfães Fit & Barber</h3>
-              <p className="text-sm text-gray-500">Transformando sua experiência em cuidados pessoais desde 2023</p>
+              <h3 className="text-gray-900 font-semibold mb-4">Bookify</h3>
+              <p className="text-sm text-gray-500">Transformando sua experiência em cuidados pessoais desde 2025</p>
             </div>
             {/* Outras seções do footer... */}
           </div>
           <div className="border-t border-gray-200 mt-12 pt-8 text-center text-sm text-gray-500">
-            © 2024 Cinfães Fit & Barber. Todos os direitos reservados.
+            © 2025 Bookify. Todos os direitos reservados.
           </div>
         </div>
       </footer>

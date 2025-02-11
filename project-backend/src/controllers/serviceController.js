@@ -1,5 +1,8 @@
 const { Service } = require('../models/service');
 const { Slot } = require('../models/slot');
+const { Booking } = require('../models/booking');
+const User = require('../models/user');
+
 const serviceController = {
   async create(req, res) {
     try {
@@ -92,6 +95,56 @@ const serviceController = {
       console.error("Erro ao buscar serviços:", error);
       return res.status(500).json({ error: "Erro interno ao buscar serviços." });
     }
-  }};
+  },
+  async getServicesBooking(req, res) {
+    try {
+      const serviceId = req.query.serviceId;
+
+      if (!serviceId) {
+        return res.status(400).json({ error: "ID da entidade é necessário." });
+      }
+
+      const bookings = await Booking.find({ service: serviceId });
+      const bookingsData = [];
+
+      for (let i = 0; i < bookings.length; i++) {
+        const booking = bookings[i];
+        const slot = await Slot.findById(booking.slot);
+        const client = await User.findById(booking.user);
+
+        bookingsData.push({
+          booking,
+          slot,
+          client
+        });
+      }
+
+      return res.status(200).json(bookingsData);
+    } catch (error) {
+      console.error("Erro ao buscar serviços:", error);
+      return res.status(500).json({ error: "Erro interno ao buscar serviços." });
+    }
+  },
+  async update(req, res) {
+    try {
+      const service = await Service.findByIdAndUpdate(req.params.serviceId, {
+        ...req.body
+      })
+      res.status(201).json(service);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  },
+  async deleteOne(req, res) {
+    try {
+      const service = await Service.findByIdAndDelete(req.params.serviceId);
+      res.status(201).json(service);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+}
+
+
 
 module.exports = { serviceController };

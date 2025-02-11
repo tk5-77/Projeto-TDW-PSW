@@ -21,7 +21,7 @@ export default function Home() {
             <div className="bg-blue-600 text-white p-2 rounded-lg">
               <FiScissors size={28} />
             </div>
-            <h1 className="text-2xl font-bold text-gray-800">Cinfães Fit & Barber</h1>
+            <h1 className="text-2xl font-bold text-gray-800">Bookify</h1>
           </div>
         </Link>
         <nav>
@@ -67,7 +67,7 @@ export default function Home() {
       {/* Features Section with Icons */}
       <section className="max-w-7xl mx-auto py-20 px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">A sua necessidade, Nossa Prioridade</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">A sua necessidade, a nossa Prioridade</h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Tecnologia e cuidado pessoal trabalhando juntos para sua melhor experiência
           </p>
@@ -122,8 +122,8 @@ export default function Home() {
       <footer className="bg-gray-900 text-gray-300 py-16 px-8 mt-20">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">Cinfães Fit & Barber</h3>
-            <p className="text-sm">Elevando padrões de beleza e bem-estar desde 2023</p>
+            <h3 className="text-white text-lg font-bold mb-4">Bookify</h3>
+            <p className="text-sm">Elevando padrões de beleza e bem-estar desde 2025</p>
           </div>
           <div>
             <h4 className="text-white font-medium mb-4">Serviços</h4>
@@ -132,16 +132,16 @@ export default function Home() {
               <li><a href="#" className="hover:text-blue-400 transition-colors">Tratamentos Faciais</a></li>
               <li><a href="#" className="hover:text-blue-400 transition-colors">Bem-Estar</a></li>
             </ul>
-          </div>
+          </div>  
           <div>
             <h4 className="text-white font-medium mb-4">Contato</h4>
             <ul className="space-y-2 text-sm">
-              <li>Rua da Elegância, 123</li>
-              <li>contato@cinfaesfitbarber.pt</li>
+              <li>Bairro da Tapada, 241</li>
+              <li>contato@Bookify.pt</li>
               <li>+351 912 345 678</li>
             </ul>
           </div>
-          <div>
+          <div> 
             <h4 className="text-white font-medium mb-4">Siga-nos</h4>
             <div className="flex space-x-4">
               <SocialIcon href="#" label="Facebook" />

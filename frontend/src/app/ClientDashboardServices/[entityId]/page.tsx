@@ -46,10 +46,10 @@ const Header = () => (
             </li>
             <li>
               <Link
-                href="/contato"
+                href="/HistoricoCliente"
                 className="text-gray-600 hover:text-blue-600 transition-colors duration-300 text-sm font-medium uppercase tracking-wide"
               >
-                Contato
+                Historico de Reservas
               </Link>
             </li>
           </ul>

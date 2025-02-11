@@ -30,8 +30,8 @@ const LoginPage: React.FC = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-10 text-center">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Welcome back</h1>
-        <p className="text-gray-500 mb-8 text-lg">Please login to your account</p>
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-6">Bem vindo de volta</h1>
+        <p className="text-gray-500 mb-8 text-lg">Faça login com a sua conta</p>
         <form onSubmit={handleLogin} className="space-y-6">
           <input
             type="email"
@@ -51,23 +51,23 @@ const LoginPage: React.FC = () => {
           />
           <div className="flex justify-between text-sm text-gray-600">
             <label className="flex items-center">
-              <input type="checkbox" className="mr-2 rounded" /> Remember me
+              <input type="checkbox" className="mr-2 rounded" />Lembrar
             </label>
             <a href="#" className="hover:underline text-blue-600 font-semibold">
-              Forgot password?
+              Esqueceu-se da password?
             </a>
           </div>
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-4 rounded-full hover:opacity-90 transition font-semibold text-lg shadow-md"
           >
-            Log me in
+            Entrar
           </button>
         </form>
         <p className="text-sm text-gray-600 text-center mt-6">
-          Don&apos;t have an account? 
+          Não tem uma conta? 
           <a href="/registo" className="text-blue-600 hover:underline font-semibold">
-            Sign up
+            Registar
           </a>
         </p>
       </div>

@@ -1,32 +1,27 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import API from '../../services/api';
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import API from "../../services/api";
+import { PencilIcon, TrashIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface Service {
   _id: string;
   type: string;
   duration: number;
-  Capacity: number;
+  capacity: number;
   publicDescription: string;
   maxWeeklyBookings: number;
   isActive: boolean;
 }
-interface slots{
-  startTime: Date,
-   endTime: Date,
-  capacity: Number,
-  bookedCount: Number
-}
-
 
 const AdminServicesPage = () => {
   const params = useParams();
   const router = useRouter();
   const { entityId } = params as { entityId: string };
   const [services, setServices] = useState<Service[]>([]);
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [formData, setFormData] = useState<Partial<Service>>({});
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -41,43 +36,61 @@ const AdminServicesPage = () => {
     if (entityId) fetchServices();
   }, [entityId]);
 
+  const handleEditClick = (service: Service) => {
+    setEditingService(service);
+    setFormData(service);
+  };
+
   const handleDelete = async (serviceId: string) => {
-    if (confirm('Tem certeza que deseja excluir este serviço?')) {
+    if (confirm("Tem certeza que deseja excluir este serviço?")) {
       try {
-        await API.delete(`/services/${serviceId}`);
-        setServices(services.filter(service => service._id !== serviceId));
+        await API.delete(`/services/deleteService/${serviceId}`);
+        setServices(services.filter((service) => service._id !== serviceId));
+        alert("Serviço excluído com sucesso!");
       } catch (error) {
         console.error("Erro ao excluir serviço:", error);
+        alert("Erro ao excluir serviço. Tente novamente.");
       }
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingService) return;
+
+    try {
+      await API.post(`/services/serviceEdit/${editingService._id}`, formData);
+      alert("Serviço atualizado com sucesso!");
+
+      setServices(
+        services.map((s) => (s._id === editingService._id ? { ...s, ...formData } : s))
+      );
+
+      setEditingService(null); // Fecha o formulário de edição
+    } catch (error) {
+      console.error("Erro ao atualizar serviço:", error);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Admin Header */}
-      <header className="bg-gray-800 text-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold">Painel de Administração</h1>
-          <div className="flex items-center space-x-4">
-            <Link 
-              href="/AdminHomePage" 
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Admin Home
-            </Link>
-            <Link 
-              href="/login" 
-              className="text-gray-300 hover:text-white transition-colors"
-            >
-              Login
-            </Link>
+    <div className="font-sans bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="bg-white shadow z-10">
+        <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-blue-600">Cinfães Fit & Barber</h1>
+          <div className="flex space-x-6">
+            <Link href="/" className="text-gray-700 hover:text-blue-600 transition">Home</Link>
+            <Link href="/login" className="text-gray-700 hover:text-blue-600 transition">Login</Link>
           </div>
-        </div>
+        </nav>
       </header>
 
-      {/* Main Content */}
+      {/* Conteúdo Principal */}
       <main className="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">
-        {/* Action Bar */}
         <div className="mb-8 flex justify-between items-center">
           <h2 className="text-2xl font-bold text-gray-900">Gestão de Serviços</h2>
           <button 
@@ -88,76 +101,21 @@ const AdminServicesPage = () => {
             Novo Serviço
           </button>
         </div>
-        
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <div className="text-2xl font-bold text-blue-600">{services.length}</div>
-            <div className="text-gray-600">Serviços Totais</div>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <div className="text-2xl font-bold text-green-600">
-              {services.filter(s => s.isActive).length}
-            </div>
-            <div className="text-gray-600">Serviços Ativos</div>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <div className="text-2xl font-bold text-purple-600">
-              {services.reduce((acc, curr) => acc + curr.maxWeeklyBookings, 0)}
-            </div>
-            <div className="text-gray-600">Reservas/Semana</div>
-          </div>
-        </div>
 
-        {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <div
-              key={service._id}
-              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200"
-            >
+            <div key={service._id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
               <div className="p-6">
-                {/* Service Header */}
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{service.type}</h3>
-                    <p className="text-sm text-gray-500">ID: {service._id.slice(-6)}</p>
-                  </div>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    service.isActive 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {service.isActive ? 'Ativo' : 'Inativo'}
-                  </span>
-                </div>
-
-                {/* Service Details */}
-                <div className="space-y-3 text-sm mb-6">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Duração:</span>
-                    <span className="text-gray-900">{service.duration} min</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Capacidade:</span>
-                    <span className="text-gray-900">{service.Capacity}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Reservas/Semana:</span>
-                    <span className="text-gray-900">{service.maxWeeklyBookings}</span>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-gray-600 text-sm mb-6">
-                  {service.publicDescription}
-                </p>
-
-                {/* Action Buttons */}
-                <div className="flex space-x-2">
+                <h3 className="text-lg font-semibold text-gray-900">{service.type}</h3>
+                <p className="text-sm text-gray-500">ID: {service._id.slice(-6)}</p>
+                <p className="text-sm mt-2"><strong>Duração:</strong> {service.duration} min</p>
+                <p className="text-sm"><strong>Capacidade:</strong> {service.capacity}</p>
+                <p className="text-sm"><strong>Reservas/Semana:</strong> {service.maxWeeklyBookings}</p>
+                <p className="text-sm text-gray-600">{service.publicDescription}</p>
+                <div className="flex mt-4 space-x-2">
                   <button
                     className="flex-1 bg-gray-100 text-gray-600 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors flex items-center justify-center"
-                    onClick={() => {/* Implementar edição */}}
+                    onClick={() => handleEditClick(service)}
                   >
                     <PencilIcon className="w-4 h-4 mr-2" />
                     Editar
@@ -173,15 +131,32 @@ const AdminServicesPage = () => {
             </div>
           ))}
         </div>
+
+        {/* Formulário de edição embutido */}
+        {editingService && (
+          <div className="mt-8 p-6 bg-white shadow-md rounded-lg">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Editar Serviço</h2>
+              <button onClick={() => setEditingService(null)}>
+                <XMarkIcon className="w-6 h-6 text-gray-500" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input type="text" name="type" value={formData.type || ""} onChange={handleChange} placeholder="Tipo" className="w-full p-2 border rounded" />
+              <input type="number" name="duration" value={formData.duration || ""} onChange={handleChange} placeholder="Duração" className="w-full p-2 border rounded" />
+              <textarea name="publicDescription" value={formData.publicDescription || ""} onChange={handleChange} placeholder="Descrição pública" className="w-full p-2 border rounded"></textarea>
+              <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Salvar</button>
+            </form>
+          </div>
+        )}
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-12">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="text-center text-sm text-gray-600">
-            © {new Date().getFullYear()} Administração de Serviços • 
-            <a href="#" className="ml-2 text-blue-600 hover:text-blue-700">Ajuda e Suporte</a>
-          </div>
+      <footer className="bg-gray-900 text-gray-300 py-16 px-8 mt-20">
+        <div className="max-w-7xl mx-auto text-center">
+          <h3 className="text-lg font-bold text-white mb-4">Cinfães Fit & Barber</h3>
+          <p className="text-sm">Rua da Elegância, 123 - contato@cinfaesfitbarber.pt - +351 912 345 678</p>
         </div>
       </footer>
     </div>

@@ -1,6 +1,7 @@
 const { Service } = require('../models/service');
 const { Slot } = require('../models/slot');
 const { Booking } = require('../models/booking');
+const { Entity } = require('../models/entity');
 
 const createBooking = async (req, res) => {
     try {
@@ -62,6 +63,55 @@ const getBookings = async (req, res) => {
     res.status(200).json(slots);
 };
 
+const getUserBookings = async(req, res) => {
+  const userId = req.user._id;
+  const bookings = await Booking.find({ user: userId }).populate('service').populate('slot');
+  const generalBookings = [];
+
+  for(const booking of bookings) {
+    const entity = await Entity.findById(booking.service.entity);
+
+    generalBookings.push({
+      booking,
+      entity
+    });
+  }
+
+  res.status(200).json(generalBookings);
+}
+
+const getUserPastBookings = async(req, res) => {
+  const userId = req.user._id;
+  const bookings = await Booking.find({ user: userId }).populate('service').populate('slot');
+  const generalBookings = [];
+
+  for(const booking of bookings) {
+    if(booking.slot.startTime < new Date()){
+      const entity = await Entity.findById(booking.service.entity);
+
+      generalBookings.push({
+        booking,
+        entity
+      });
+    }
+  }
+
+  res.status(200).json(generalBookings);
+}
+
+const deleteBooking = async (req, res) => {
+  const bookingId = req.params.id;
+
+  if (!bookingId) {
+    return res.status(400).send({ error: 'ID da reserva não fornecido' });
+  }
+
+  await Booking.findByIdAndDelete(bookingId);
+
+  res.status(200).send({ message: 'Reserva excluída com sucesso' });
+}
+
+
 async function generateTimeSlots(serviceId) {
   const days = 10;
   const startHour = 10;
@@ -112,4 +162,4 @@ async function generateTimeSlots(serviceId) {
   return Array.from(slotMap.values());
 }
 
-module.exports = { createBooking, getBookings }; // Certifique-se de exportar ambas as funções
+module.exports = { createBooking, getBookings, getUserBookings, deleteBooking, getUserPastBookings }; // Certifique-se de exportar ambas as funções
