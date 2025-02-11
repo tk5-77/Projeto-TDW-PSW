@@ -81,9 +81,9 @@ const AdminServicesPage = () => {
       {/* Header */}
       <header className="bg-white shadow z-10">
         <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-blue-600">Cinfães Fit & Barber</h1>
+          <h1 className="text-2xl font-bold text-blue-600">Bookify</h1>
           <div className="flex space-x-6">
-            <Link href="/" className="text-gray-700 hover:text-blue-600 transition">Home</Link>
+            <Link href="/AdminHomePage" className="text-gray-700 hover:text-blue-600 transition">Home</Link>
             <Link href="/login" className="text-gray-700 hover:text-blue-600 transition">Login</Link>
           </div>
         </nav>
@@ -155,8 +155,8 @@ const AdminServicesPage = () => {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-300 py-16 px-8 mt-20">
         <div className="max-w-7xl mx-auto text-center">
-          <h3 className="text-lg font-bold text-white mb-4">Cinfães Fit & Barber</h3>
-          <p className="text-sm">Rua da Elegância, 123 - contato@cinfaesfitbarber.pt - +351 912 345 678</p>
+          <h3 className="text-lg font-bold text-white mb-4">Bookifyr</h3>
+          <p className="text-sm">Bairro da Tapada, 241 - contato@bookify.pt - +351 912 345 678</p>
         </div>
       </footer>
     </div>

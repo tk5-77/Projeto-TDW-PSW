@@ -68,7 +68,7 @@ const FuncionarioServicosPage: React.FC = () => {
           Bookify
         </h1>
         <nav className="space-x-4">
-          <Link href="/AdminHomePage" className="text-gray-700 hover:text-blue-600">
+          <Link href="/FuncionarioHomePage" className="text-gray-700 hover:text-blue-600">
             Home
           </Link>
           <Link href="/login" className="text-gray-700 hover:text-blue-600">

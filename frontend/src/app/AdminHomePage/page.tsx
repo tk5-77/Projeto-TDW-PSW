@@ -46,7 +46,7 @@ export default function AdminHome() {
         <nav className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-blue-600">
-              Cinfães Fit & Barber
+              Bookify
             </h1>
           </div>
           <div className="flex space-x-6">
@@ -126,10 +126,10 @@ export default function AdminHome() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-white text-lg font-bold mb-4">
-              Cinfães Fit & Barber
+              Bookify
             </h3>
             <p className="text-sm">
-              Elevando padrões de beleza e bem-estar desde 2023
+              Elevando padrões de beleza e bem-estar desde 2025
             </p>
           </div>
           <div>
@@ -164,8 +164,8 @@ export default function AdminHome() {
           <div>
             <h4 className="text-white font-medium mb-4">Contato</h4>
             <ul className="space-y-2 text-sm">
-              <li>Rua da Elegância, 123</li>
-              <li>contato@cinfaesfitbarber.pt</li>
+              <li>Bairro da Tapada, 241</li>
+              <li>contato@bookify.pt</li>
               <li>+351 912 345 678</li>
             </ul>
           </div>

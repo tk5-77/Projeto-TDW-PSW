@@ -71,7 +71,7 @@ const AdminEntityPage = () => {
                 onClick={handleGoToServices}
                 className="flex items-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Gerenciar Serviços
+                GerirServiços
                 <FiArrowUpRight className="ml-2" />
               </button>
             </div>
@@ -134,7 +134,7 @@ const AdminEntityPage = () => {
         <div className="max-w-7xl mx-auto px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h4 className="text-white font-semibold mb-4">Cinfães Admin</h4>
+              <h4 className="text-white font-semibold mb-4">Bookify Admin</h4>
               <p className="text-sm">Gestão profissional de serviços de beleza e bem-estar</p>
             </div>
             <div>
@@ -156,7 +156,7 @@ const AdminEntityPage = () => {
             <div>
               <h5 className="text-white font-medium mb-4">Contactos</h5>
               <div className="space-y-2 text-sm">
-                <p>suporte@cinfaesfitbarber.com</p>
+                <p>suporte@bookify.com</p>
                 <p>+351 123 456 789</p>
                 <div className="flex space-x-4 mt-2">
                   <a href="#" className="text-neutral-400 hover:text-white">
@@ -170,7 +170,7 @@ const AdminEntityPage = () => {
             </div>
           </div>
           <div className="border-t border-neutral-800 mt-8 pt-8 text-center text-sm">
-            <p>© 2024 Cinfães Fit & Barber. Todos os direitos reservados.</p>
+            <p>© 2025 Bookify. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

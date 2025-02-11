@@ -69,7 +69,8 @@ const ClienteMeusServicosPage: React.FC = () => {
   }, [(authContext.user as any)?.token]);
 
   const handleDeleteBooking = async (bookingId: string) => {
-    if (!window.confirm("Tem certeza que deseja apagar esta reserva?")) return;
+     if (!window.confirm("Tem certeza que deseja apagar esta reserva?")) return;
+    console.log("Deleting booking with ID:", bookingId);
     try {
       await API.delete(`/bookings/deleteBooking/${bookingId}`, {
         headers: {
@@ -113,40 +114,38 @@ const ClienteMeusServicosPage: React.FC = () => {
         ) : bookings.length === 0 ? (
           <p className="text-center text-gray-600">Nenhuma marcação encontrada.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {bookings.map(({ booking, entity }) => (
               <div
                 key={booking._id}
-                className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+                className="bg-white rounded-xl shadow-xl p-6 border border-gray-200 hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               >
                 <div className="mb-4">
-                  <h3 className="text-xl font-semibold text-gray-800">
+                  <h3 className="text-2xl font-semibold text-gray-800">
                     {booking.service.type}
                   </h3>
-                  <p className="text-gray-500 text-sm">{entity.name}</p>
+                  <p className="text-gray-500">{entity.name}</p>
                 </div>
-                <div className="space-y-2 text-sm text-gray-600">
-                  <div>
-                    <span className="font-medium">Início:</span>{" "}
-                    {new Date(booking.slot.startTime).toLocaleString()}
-                  </div>
-                  <div>
-                    <span className="font-medium">Fim:</span>{" "}
-                    {new Date(booking.slot.endTime).toLocaleString()}
-                  </div>
-                  <div>
-                    <span className="font-medium">Status:</span>{" "}
-                    <span
-                      className={`font-medium ${
-                        booking.status === "confirmed"
-                          ? "text-green-500"
-                          : "text-yellow-500"
-                      }`}
-                    >
-                      {booking.status.charAt(0).toUpperCase() +
-                        booking.status.slice(1)}
-                    </span>
-                  </div>
+                <div className="mb-2">
+                  <span className="font-medium">Início:</span>{" "}
+                  {new Date(booking.slot.startTime).toLocaleString()}
+                </div>
+                <div className="mb-2">
+                  <span className="font-medium">Fim:</span>{" "}
+                  {new Date(booking.slot.endTime).toLocaleString()}
+                </div>
+                <div className="mb-2">
+                  <span className="font-medium">Status:</span>{" "}
+                  <span
+                    className={`font-medium ${
+                      booking.status === "confirmed"
+                        ? "text-green-500"
+                        : "text-yellow-500"
+                    }`}
+                  >
+                    {booking.status.charAt(0).toUpperCase() +
+                      booking.status.slice(1)}
+                  </span>
                 </div>
                 {/* Botão de Delete */}
                 <button
