@@ -31,7 +31,15 @@ export default function CustomerHistory() {
     const fetchBookings = async () => {
       try {
         const response = await API.get("/bookings/getUserPastBookings");
-        setBookings(response.data);
+        // Ajusta os dados para ficarem no formato esperado
+        const formattedBookings = response.data.map((item: any) => ({
+          _id: item.booking._id,
+          service: item.booking.service,
+          slot: item.booking.slot,
+          status: item.booking.status,
+          entity: item.entity,
+        }));
+        setBookings(formattedBookings);
       } catch (error) {
         console.error("Erro ao buscar histórico de reservas", error);
       }

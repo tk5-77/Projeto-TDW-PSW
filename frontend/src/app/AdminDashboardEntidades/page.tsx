@@ -44,7 +44,7 @@ const AdminEntityPage = () => {
       <header className="w-full bg-white border-b border-neutral-200 py-4 px-8 fixed top-0 z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="text-2xl font-semibold text-neutral-900">
-            <span className="text-blue-600">Cinfães</span> Admin
+            <span className="text-blue-600">Bookify</span> Admin
           </Link>
           <nav className="space-x-6">
             <Link href="/AdminHomePage" className="text-neutral-600 hover:text-blue-600 transition-colors">

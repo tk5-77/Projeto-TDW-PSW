@@ -26,7 +26,7 @@ interface BookingData {
 const SocialIcon: React.FC<{ href: string; label: string }> = ({ href, label }) => (
   <a
     href={href}
-    className="bg-gray-800 p-3 rounded-lg hover:bg-blue-600 transition-colors"
+    className="bg-gray-800 p-3 rounded-lg hover:bg-blue-600 transition-colors duration-300"
   >
     <span className="sr-only">{label}</span>
     {/* Substitua pelo ícone real desejado */}
@@ -69,7 +69,7 @@ const ClienteMeusServicosPage: React.FC = () => {
   }, [(authContext.user as any)?.token]);
 
   const handleDeleteBooking = async (bookingId: string) => {
-     if (!window.confirm("Tem certeza que deseja apagar esta reserva?")) return;
+    if (!window.confirm("Tem certeza que deseja apagar esta reserva?")) return;
     console.log("Deleting booking with ID:", bookingId);
     try {
       await API.delete(`/bookings/deleteBooking/${bookingId}`, {
@@ -94,11 +94,11 @@ const ClienteMeusServicosPage: React.FC = () => {
         <nav className="space-x-4">
           <Link
             href="/ClientDashboardentidades"
-            className="text-gray-700 hover:text-blue-600"
+            className="text-gray-700 hover:text-blue-600 transition-colors duration-300"
           >
             Home
           </Link>
-          <Link href="/login" className="text-gray-700 hover:text-blue-600">
+          <Link href="/login" className="text-gray-700 hover:text-blue-600 transition-colors duration-300">
             Login
           </Link>
         </nav>
@@ -108,17 +108,19 @@ const ClienteMeusServicosPage: React.FC = () => {
       <main className="flex-grow container mx-auto px-6 py-16">
         <h2 className="text-3xl font-bold text-center mb-12">Minhas Marcações</h2>
         {loading ? (
-          <p className="text-center mt-4 text-lg">Carregando...</p>
+          <div className="flex justify-center items-center mt-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          </div>
         ) : error ? (
           <p className="text-center mt-4 text-lg text-red-500">{error}</p>
         ) : bookings.length === 0 ? (
           <p className="text-center text-gray-600">Nenhuma marcação encontrada.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {bookings.map(({ booking, entity }) => (
               <div
                 key={booking._id}
-                className="bg-white rounded-xl shadow-xl p-6 border border-gray-200 hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
               >
                 <div className="mb-4">
                   <h3 className="text-2xl font-semibold text-gray-800">
@@ -138,19 +140,23 @@ const ClienteMeusServicosPage: React.FC = () => {
                   <span className="font-medium">Status:</span>{" "}
                   <span
                     className={`font-medium ${
-                      booking.status === "confirmed"
+                      new Date(booking.slot.endTime) < new Date()
+                        ? "text-red-500"
+                        : booking.status === "confirmed"
                         ? "text-green-500"
                         : "text-yellow-500"
                     }`}
                   >
-                    {booking.status.charAt(0).toUpperCase() +
-                      booking.status.slice(1)}
+                    {new Date(booking.slot.endTime) < new Date()
+                      ? "Expired"
+                      : booking.status.charAt(0).toUpperCase() +
+                        booking.status.slice(1)}
                   </span>
                 </div>
                 {/* Botão de Delete */}
                 <button
                   onClick={() => handleDeleteBooking(booking._id)}
-                  className="mt-4 w-full flex items-center justify-center space-x-2 text-red-600 hover:text-red-800 font-medium py-2 px-4 rounded-lg hover:bg-red-50 transition-colors"
+                  className="mt-4 w-full flex items-center justify-center space-x-2 text-red-600 hover:text-red-800 font-medium py-2 px-4 rounded-lg hover:bg-red-50 transition-colors duration-300"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -190,7 +196,7 @@ const ClienteMeusServicosPage: React.FC = () => {
               <li>
                 <a
                   href="#"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-blue-400 transition-colors duration-300"
                 >
                   Cortes Premium
                 </a>
@@ -198,7 +204,7 @@ const ClienteMeusServicosPage: React.FC = () => {
               <li>
                 <a
                   href="#"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-blue-400 transition-colors duration-300"
                 >
                   Tratamentos Faciais
                 </a>
@@ -206,7 +212,7 @@ const ClienteMeusServicosPage: React.FC = () => {
               <li>
                 <a
                   href="#"
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-blue-400 transition-colors duration-300"
                 >
                   Bem-Estar
                 </a>

@@ -84,7 +84,7 @@ const AdminServicesPage = () => {
           <h1 className="text-2xl font-bold text-blue-600">Bookify</h1>
           <div className="flex space-x-6">
             <Link href="/AdminHomePage" className="text-gray-700 hover:text-blue-600 transition">Home</Link>
-            <Link href="/login" className="text-gray-700 hover:text-blue-600 transition">Login</Link>
+            <Link href={`/AdminGerirReservas/}`} className="text-gray-700 hover:text-blue-600 transition">Login</Link>
           </div>
         </nav>
       </header>
@@ -104,7 +104,10 @@ const AdminServicesPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <div key={service._id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200">
+            <div 
+              key={service._id} 
+              onClick={() => router.push(`/AdminGerirReservas/${service._id}`)}
+              className="cursor-pointer bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-200 p-4">
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900">{service.type}</h3>
                 <p className="text-sm text-gray-500">ID: {service._id.slice(-6)}</p>
